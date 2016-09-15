@@ -1,0 +1,15 @@
+//
+   Created by Amin on 14/09/2016.
+h2= title
+form(method="post")
+    fieldset
+        legend New Password
+        p
+            label(for="password") Enter new password <br/>
+            input(type="password", name="password")
+        p
+            label(for="repeat") Repeat new password <br/>
+            input(type="password", name="repeat")
+        p(style='color:red')= error
+    p.buttons
+        input(type="submit", value="Save")
