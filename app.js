@@ -31,25 +31,26 @@ passport.serializeUser(function(user, done) {
 });
 
 passport.deserializeUser(function(id, done) {
-    db.getSingleUser(id, function(user) {
-        return done(null, user.id);
-    },function(err){console.log(err);})
+    db.getSingleUser(id)
+        .then(function(user) {
+            done(null, user.id)})
+        .catch(function(err){console.log(err);});
 });
 passport.use(new LocalStrategy(
     function(username, password, done) {
-        db.getSingleUser( username.toLowerCase(), function(user) {
-            console.log(user);
-            if (!user) {
-                return done(null, false, {message: 'Incorrect username.'});
-            }
-
-            if (!user.validPassword(password)) {
-                return done(null, false, {message: 'Incorrect password.'});
-            }
-            return done(null, user.id);
-        },function(err){console.log(err);})
+        db.getSingleUser(username)
+            .then(function(data) {
+                console.log('valid user', data);
+                return db.validPassword(data, password);
+                })
+            .then(function(data){
+                console.log('valid password', data);
+                    return done(null, data.id)})
+            .catch(function(err){
+                console.log(err);
+                return done(null, false, {message: err});
+            });
     }));
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');

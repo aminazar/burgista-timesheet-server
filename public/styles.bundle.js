@@ -1,15 +1,15 @@
 webpackJsonp([1,2],{
 
-/***/ 384:
+/***/ 409:
 /***/ function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(639);
+var content = __webpack_require__(675);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
-var update = __webpack_require__(924)(content, {});
+var update = __webpack_require__(967)(content, {});
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -27,22 +27,22 @@ if(false) {
 
 /***/ },
 
-/***/ 639:
+/***/ 675:
 /***/ function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(640)();
+exports = module.exports = __webpack_require__(676)();
 // imports
 
 
 // module
-exports.push([module.i, "/* You can add global styles to this file, and also import other style files */", ""]);
+exports.push([module.i, "/* Remove the navbar's default margin-bottom and rounded borders */\n.navbar {\n    margin-bottom: 0;\n    border-radius: 0;\n}\n\n/* Set height of the grid so .sidenav can be 100% (adjust as needed) */\n.row.content {\n    background-image: url('/assets/img/Burg_bg_light.jpg');\n    background-size: 320px;\n    background-position: center;\n    background-repeat: no-repeat;\n    min-height: 800px;}\n.navbar-brand{\n    font-family:\"American Typewriter\", serif;\n    font-size: 28px;\n}\n/* Set gray background color and 100% height */\n.sidenav {\n    padding-top: 20px;\n    background-color: #f1f1f1;\n    height: 100%;\n}\n\n/* Set black background color, white text and some padding */\nfooter {\n    background-color: #555;\n    color: white;\n    padding: 15px;\n}\n\n/* On small screens, set height to 'auto' for sidenav and grid */\n@media screen and (max-width: 767px) {\n    .sidenav {\n        height: auto;\n        padding: 15px;\n    }\n    .row.content {height:auto;}\n}\nbody{\n    font-family:'Varela Round', sans-serif;\n}\n.col-sm-8{\n    padding:15px;\n}", ""]);
 
 // exports
 
 
 /***/ },
 
-/***/ 640:
+/***/ 676:
 /***/ function(module, exports) {
 
 /*
@@ -99,7 +99,7 @@ module.exports = function() {
 
 /***/ },
 
-/***/ 924:
+/***/ 967:
 /***/ function(module, exports) {
 
 /*
@@ -352,13 +352,13 @@ function updateLink(linkElement, obj) {
 
 /***/ },
 
-/***/ 927:
+/***/ 970:
 /***/ function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(384);
+module.exports = __webpack_require__(409);
 
 
 /***/ }
 
-},[927]);
+},[970]);
 //# sourceMappingURL=styles.map
