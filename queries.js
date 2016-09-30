@@ -8,23 +8,6 @@ var pgp = require('pg-promise')(options);
 var connectionString = 'postgres://localhost:5432/burgistatimesheet';
 var db = pgp(connectionString);
 
-function getSingleUserHTTP(req, res, next){
-    var userID = parseInt(req.params.id);
-    getSingleUser(userID,'uid')
-        .then(function(data){
-        res.status(200)
-            .json({
-                status: 'success',
-                data: data,
-                message: 'Retrieved user with id ' + userID
-            });
-        })
-        .catch(
-        function(err){
-            return next(err);
-        });
-}
-
 function getSingleUser(id, col){
     return( new promise(function(onSuccess,onError){
     col = col||'id';
@@ -112,14 +95,45 @@ function updatePassword(userid, newpass, onSuccess, onError){
     });
 }
 function deleteResetPassword(id){
-    db.one("delete from pwdresets where id=${id}",{id:id});
+    db.one("delete from pwdresets where id=${id} returning id",{id:id});
 }
+
+
+function listBranches(){
+    return new promise(function(resolve,reject){
+        db.any("select * from branches")
+            .then(function(res){resolve(res)})
+            .catch(function(err){reject(err)});
+    })
+}
+
+function addBranch(name){
+    return new promise(function(resolve,reject){
+        db.one("insert into branches(name) values(${name}) returning bid", {name:name})
+            .then(function(res){resolve(res)})
+            .catch(function(err){reject(err)});
+    })
+}
+
+function deleteBranch(bid){
+    return new promise(function(resolve,reject){
+        console.log(bid);
+        db.result("delete from branches where bid=${bid}", {bid:parseInt(bid)})
+            .then(function(res){
+                resolve(res.rowCount)})
+            .catch(function(err){
+                reject(err.message)});
+    })
+}
+
 module.exports = {
-    getSingleUserHTTP:  getSingleUserHTTP,
     getSingleUser:      getSingleUser,
     validPassword:      validPassword,
     getResetPassword:   getResetPassword,
     insertResetPassword:insertResetPassword,
     updatePassword:     updatePassword,
-    deleteResetPassword:deleteResetPassword
+    deleteResetPassword:deleteResetPassword,
+    listBranches:       listBranches,
+    addBranch:          addBranch,
+    deleteBranch:       deleteBranch
 };

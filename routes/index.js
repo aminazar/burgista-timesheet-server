@@ -86,17 +86,40 @@ router.get('/logout',function(req, res){
   res.sendStatus(200);
 });
 
+/*
 //checks to be sure users are authenticated
-router.all("/api/*", function(req, res, next){
+router.all("/api/!*", function(req, res, next){
     if (!req.user)
         res.sendStatus(403);
     else
         next();
 });
+*/
 
 /* RESTful API */
-router.get('/api/users/:id', db.getSingleUserHTTP);
+function apiResponse(dbPromise, reqFuncs){
+    var args = Array.prototype.slice.call(arguments, 2);
+    return(function(req, res, next)
+    {
+        for(var i in reqFuncs)
+            args.splice(0, 0, reqFuncs[ i ](req))
 
+        dbPromise.apply(null,args)
+            .then(function (data) {
+                res.status(200)
+                    .json(data);
+            })
+            .catch(
+                function (err) {
+                    console.log(db.Promise, err);
+                    res.status(500).json({error:err});
+                });
+    });
+}
+router.get('/api/users/:id', apiResponse(db.getSingleUser,[function(req){return parseInt(req.params.id);}],'uid'));
+router.get('/api/branches', apiResponse(db.listBranches));
+router.put('/api/branch', apiResponse(db.addBranch,[(req)=>req.body.name]));
+router.delete('/api/branch/:id', apiResponse(db.deleteBranch,[(req)=>parseInt(req.params.id)]));
 router.all("*",function(req,res){
     console.log('[TRACE] Server 404 request: '+req.originalUrl);
     var p = path.join(__dirname, 'public', 'index.html').replace(/\/routes\//,'/');
