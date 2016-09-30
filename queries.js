@@ -5,8 +5,8 @@ var promise = require('bluebird');
 var bCrypt  = require('bcrypt-nodejs');
 var options = {promiseLib: promise};
 var pgp = require('pg-promise')(options);
-var app = require('express');
-var config = requrie('./config.json')[app.get('env')];
+var app = require('express')();
+var config = require('./config.json')[app.get('env')];
 var connectionString = config.pgConnection;
 var db = pgp(connectionString);
 
