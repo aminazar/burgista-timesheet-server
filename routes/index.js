@@ -116,10 +116,14 @@ function apiResponse(dbPromise, reqFuncs){
                 });
     });
 }
-router.get('/api/users/:id', apiResponse(db.getSingleUser,[function(req){return parseInt(req.params.id);}],'uid'));
+/* Branches */
 router.get('/api/branches', apiResponse(db.listBranches));
 router.put('/api/branch', apiResponse(db.addBranch,[(req)=>req.body.name]));
 router.delete('/api/branch/:id', apiResponse(db.deleteBranch,[(req)=>parseInt(req.params.id)]));
+/* Employees */
+router.get('/api/user/:id', apiResponse(db.getSingleUser,[function(req){return parseInt(req.params.id);}],'uid'));
+router.get('/api/users', apiResponse(db.getEmployees));
+router.put('/api/user', apiResponse(db.addEmployee))
 router.all("*",function(req,res){
     console.log('[TRACE] Server 404 request: '+req.originalUrl);
     var p = path.join(__dirname, 'public', 'index.html').replace(/\/routes\//,'/');
