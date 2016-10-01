@@ -4,9 +4,7 @@
 var promise = require('bluebird');
 var nodemailer = require('nodemailer');
 
-function mailer(email,hash) {
-    //TODO: update link in production
-    var link = 'http://localhost:3000/reset/' + hash;
+function mailer(email,link) {
     // create reusable transporter object using the default SMTP transport
     var transporter = nodemailer.createTransport('smtps://burgistats%40gmail.com:Am1rM0nfar3d@smtp.gmail.com');
 
