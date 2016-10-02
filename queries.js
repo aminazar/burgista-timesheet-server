@@ -64,18 +64,12 @@ function insertResetPassword(userid){
             })
             .then(function(){
                 db.result("insert into pwdresets(uid, id) values($1, $2)", [userid, hashG])
-                    .then((result)=>{
-                        console.log(result);
-                        return(result);
+                    .then(()=>{
+                        onSuccess(hashG);
                     })
-                    .catch((err)=>console.log(err));
-            })
-            .then(function (result) {
-                console.log('Password reset link is created for uid=' + userid, result);
-                onSuccess(hashG);
+                    .catch((err)=>onError(err.message||err));
             })
             .catch(function (error) {
-                console.log("ERROR in creating passoword reset link for uid=" + userid, error.message || error); // print error;
                 onError(error.message || error)
             });
     });
@@ -119,8 +113,8 @@ function listBranches(){
 
 function addBranch(name){
     return new promise(function(resolve,reject){
-        db.one("insert into branches(id) values(${name}) returning bid", {name:name})
-            .then(function(res){resolve(res)})
+        db.one("insert into branches(name) values($1) returning bid", [name])
+            .then(function(res){resolve(res.bid)})
             .catch(function(err){reject(err.message)});
     })
 }
@@ -148,19 +142,24 @@ function addUser(email,link){
         var uid = '';
         var id = email;
         db.one("insert into users(id) values($1) returning uid", [ email.toLowerCase() ] )
-            .then(function(res){uid = res.uid;return insertResetPassword(uid)})
-            .then(function(hash){
-                //TODO: update admin email
-                var email = id.toLowerCase();
-                link += hash;
-                mailer(email,link)
-                    .then(resolve(uid))
-                    .catch(function(){
-                        db.none('delete from pwdreset where uid=$1',[uid])
-                            .then(()=>reject('could not send email to reset password.'))
-                            .catch(()=>reject('could not send email to reset password.'));
-                    })
-            })
+            .then(function(res){
+                uid = res.uid;
+                insertResetPassword(uid)
+                    .then(function(hash){
+                        var email = id.toLowerCase();
+                        link += hash;
+                        mailer(email,link)
+                            .then(()=>resolve(uid))
+                            .catch(function(error){
+                                db.none('delete from pwdresets where uid=$1',[uid])
+                                    .then(()=>{
+                                        db.none('delete from users where uid=$1',[uid])
+                                        .then(function(){reject('Sending email to set password failed: ' + error.message);})
+                                        .catch((error2)=>reject('Sending email to set password failed: ' + error.message + '. Furthermore, could not delete from db: '+ error2.message));
+                                })
+                                .catch(function(error2){reject('Sending email to set password failed: ' + error.message + '. Furthermore, could not delete from db: '+ error2.message);});
+                            })
+                    })})
             .catch(function(err){reject(err.message)});
     })
 }

@@ -93,7 +93,7 @@ router.get('/logout',function(req, res){
 });
 
 //checks to be sure users are authenticated
-router.all("/api/!*", function(req, res, next){
+router.all("/api/*", function(req, res, next){
     if (!req.user )
         res.sendStatus(403);
     else
@@ -124,7 +124,7 @@ function apiResponse(dbPromise, adminOnly, reqFuncs){
                 })
                 .catch(
                     function (err) {
-                        console.log(db.Promise, err);
+                        console.log(dbPromise.name + ':', err);
                         res.status(500)
                             .send(err.message || err);
                     });

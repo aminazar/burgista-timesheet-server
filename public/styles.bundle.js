@@ -6,10 +6,10 @@ webpackJsonp([1,2],{
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(678);
+var content = __webpack_require__(680);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
-var update = __webpack_require__(971)(content, {});
+var update = __webpack_require__(977)(content, {});
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -27,10 +27,10 @@ if(false) {
 
 /***/ },
 
-/***/ 678:
+/***/ 680:
 /***/ function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(679)();
+exports = module.exports = __webpack_require__(681)();
 // imports
 
 
@@ -42,7 +42,7 @@ exports.push([module.i, "/* Remove the navbar's default margin-bottom and rounde
 
 /***/ },
 
-/***/ 679:
+/***/ 681:
 /***/ function(module, exports) {
 
 /*
@@ -99,7 +99,7 @@ module.exports = function() {
 
 /***/ },
 
-/***/ 971:
+/***/ 977:
 /***/ function(module, exports) {
 
 /*
@@ -352,7 +352,7 @@ function updateLink(linkElement, obj) {
 
 /***/ },
 
-/***/ 974:
+/***/ 980:
 /***/ function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(412);
@@ -360,5 +360,5 @@ module.exports = __webpack_require__(412);
 
 /***/ }
 
-},[974]);
+},[980]);
 //# sourceMappingURL=styles.map
