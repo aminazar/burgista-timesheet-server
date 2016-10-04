@@ -140,6 +140,11 @@ router.get('/api/user/:id', apiResponse(db.getSingleUser,[function(req){return p
 router.get('/api/users', apiResponse(db.listUsers));
 router.put('/api/user', apiResponse(db.addUser, true, [(req)=>req.body.id,(req)=>req.protocol + '://' + req.get('host') + '/reset/']));
 router.delete('/api/user/:id', apiResponse(db.deleteUser, true, [function(req){return parseInt(req.params.id);}]));
+/* Employee */
+router.get('/api/employees', apiResponse(db.listEmployees));
+router.put('/api/employee', apiResponse(db.addEmployee, true,[(req)=>req.body]));
+router.delete('/api/employee/:id', apiResponse(db.deleteEmployee, true, [req=>req.params.id]));
+router.post('/api/employee/:id', apiResponse(db.updateEmployee, true, [req=>req.params.id, req=>req.body]));
 router.all("*",function(req,res){
     console.log('[TRACE] Server 404 request: '+req.originalUrl);
     var p = path.join(__dirname, 'public', 'index.html').replace(/\/routes\//,'/');

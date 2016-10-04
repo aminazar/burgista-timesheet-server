@@ -182,6 +182,37 @@ function deleteUser(uid){
         });
     })
 }
+function listEmployees(){
+    return new promise(function(resolve,reject){
+       db.any('select * from employees')
+           .then(res=>resolve(res))
+           .catch(err=>reject('Failed listing employees: ' + err.message));
+    });
+}
+function addEmployee(values){
+    return new promise(function(resolve,reject){
+        db.one('insert into employees(firstname, surname, rate, role) values(${firstname},${surname},${rate}, ${role}) returning eid',values)
+            .then(res=>resolve(res.eid))
+            .catch(err=>reject('Failed adding employee: ' + err.message));
+    });
+}
+
+function deleteEmployee(eid){
+    return new promise(function(resolve,reject){
+        db.result("delete from employees where eid=$1",[parseInt(eid)])
+            .then((res)=>resolve(res.rowCount))
+            .catch(err=>reject('Failed deleting employee: '+ err.message));
+
+    });
+}
+
+function updateEmployee(eid, values){
+    return new promise(function(resolve,reject){
+        db.query(pgp.helpers.update(values, null, 'employees') + ' where eid=' + eid)
+            .then(()=>resolve('updated employee'))
+            .catch(err=>reject('Failed updating employee: ' + err.message))
+    });
+}
 
 module.exports = {
     getSingleUser:      getSingleUser,
@@ -195,5 +226,9 @@ module.exports = {
     deleteBranch:       deleteBranch,
     listUsers:          listUsers,
     addUser:            addUser,
-    deleteUser:         deleteUser
+    deleteUser:         deleteUser,
+    listEmployees:      listEmployees,
+    addEmployee:        addEmployee,
+    deleteEmployee:     deleteEmployee,
+    updateEmployee:     updateEmployee
 };
