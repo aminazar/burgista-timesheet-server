@@ -184,14 +184,14 @@ function deleteUser(uid){
 }
 function listEmployees(){
     return new promise(function(resolve,reject){
-       db.any('select * from employees')
+       db.any('select * from employees order by contract_end desc,contract_date asc')
            .then(res=>resolve(res))
            .catch(err=>reject('Failed listing employees: ' + err.message));
     });
 }
 function addEmployee(values){
     return new promise(function(resolve,reject){
-        db.one('insert into employees(firstname, surname, rate, role) values(${firstname},${surname},${rate}, ${role}) returning eid',values)
+        db.one(pgp.helpers.insert(values,null,'employees') + ' returning eid')
             .then(res=>resolve(res.eid))
             .catch(err=>reject('Failed adding employee: ' + err.message));
     });
@@ -201,16 +201,48 @@ function deleteEmployee(eid){
     return new promise(function(resolve,reject){
         db.result("delete from employees where eid=$1",[parseInt(eid)])
             .then((res)=>resolve(res.rowCount))
-            .catch(err=>reject('Failed deleting employee: '+ err.message));
+            .catch(err=> {
+                db.query("update employees set contract_end=current_date+1 where eid=$",[id])
+                    .then(()=>resolve(1))
+                    .catch(err2=>reject('Failed deleting employee: '+err.message + '\ncould not update contract end too: ' + err2.message));
+            });
 
     });
 }
 
 function updateEmployee(eid, values){
     return new promise(function(resolve,reject){
-        db.query(pgp.helpers.update(values, null, 'employees') + ' where eid=' + eid)
-            .then(()=>resolve('updated employee'))
-            .catch(err=>reject('Failed updating employee: ' + err.message))
+        var newEid;
+        db.one('select * from employees where eid=$1',[eid])
+          .then(function(cur_data){
+              if( cur_data.rate.substr(1)===values.rate ){
+                //destructive update in case anything but rate is changed
+                  db.query(pgp.helpers.update(values, null, 'employees') + ' where eid=' + eid)
+                      .then(function(){resolve('updated employee')})
+                      .catch(function(err){reject('Failed updating employee: ' + err.message)});
+              }
+              else{
+                  //non-destructive update in case the rate changes, to keep recored of previous rate
+                  db.tx(function(t){
+                      return t.result("delete from employees where eid=$1", [eid])
+                        .then(function(){
+                            return t.query(pgp.helpers.insert(values,null,'employees') + ' returning eid');
+                        })
+                        .then(function(res){resolve(res[0].eid)})
+                        .catch(function(err){
+                            db.tx(function(t2){
+                                return t2.result("update employees set contract_end=current_date where eid=$1", [eid])
+                                  .then(function(){
+                                      return t2.query(pgp.helpers.insert(values,null,'employees') + ' returning eid');
+                                  });
+                            })
+                              .then(function(res){resolve(res[0].eid)})
+                              .catch(function(err2){reject('Failed to update employee: '+ err2.message + ', failed earlier: ' + err.message)});
+                        });
+                  })
+              }
+
+            })
     });
 }
 

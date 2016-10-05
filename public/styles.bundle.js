@@ -1,15 +1,16 @@
 webpackJsonp([1,2],{
 
-/***/ 1094:
+/***/ 1104:
 /***/ function(module, exports, __webpack_require__) {
 
-__webpack_require__(485);
-module.exports = __webpack_require__(484);
+__webpack_require__(488);
+__webpack_require__(487);
+module.exports = __webpack_require__(486);
 
 
 /***/ },
 
-/***/ 445:
+/***/ 260:
 /***/ function(module, exports) {
 
 /*
@@ -66,7 +67,7 @@ module.exports = function() {
 
 /***/ },
 
-/***/ 481:
+/***/ 274:
 /***/ function(module, exports) {
 
 /*
@@ -319,16 +320,43 @@ function updateLink(linkElement, obj) {
 
 /***/ },
 
-/***/ 484:
+/***/ 486:
 /***/ function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(795);
+var content = __webpack_require__(802);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
-var update = __webpack_require__(481)(content, {});
+var update = __webpack_require__(274)(content, {});
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!./../node_modules/css-loader/index.js!./../node_modules/postcss-loader/index.js!./../node_modules/sass-loader/index.js!./md-card.scss", function() {
+			var newContent = require("!!./../node_modules/css-loader/index.js!./../node_modules/postcss-loader/index.js!./../node_modules/sass-loader/index.js!./md-card.scss");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ },
+
+/***/ 487:
+/***/ function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(803);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// add the styles to the DOM
+var update = __webpack_require__(274)(content, {});
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -346,16 +374,16 @@ if(false) {
 
 /***/ },
 
-/***/ 485:
+/***/ 488:
 /***/ function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(796);
+var content = __webpack_require__(804);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
-var update = __webpack_require__(481)(content, {});
+var update = __webpack_require__(274)(content, {});
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -373,10 +401,25 @@ if(false) {
 
 /***/ },
 
-/***/ 795:
+/***/ 802:
 /***/ function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(445)();
+exports = module.exports = __webpack_require__(260)();
+// imports
+
+
+// module
+exports.push([module.i, "md-card {\n  display: block;\n  position: relative;\n  padding: rem(2.4);\n  border-radius: 2px;\n  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4);\n  background: rgba(255, 255, 255, 0.6); }\n\nmd-card.md-expired {\n  background: rgba(250, 250, 230, 0.8); }\n\nmd-card.md-add {\n  box-shadow: 0 4px 8px 0 rgba(100, 0, 0, 0.8); }\n\nmd-card.md-update {\n  box-shadow: 0 4px 8px 0 rgba(0, 64, 128, 0.8); }\n", ""]);
+
+// exports
+
+
+/***/ },
+
+/***/ 803:
+/***/ function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(260)();
 // imports
 
 
@@ -388,20 +431,20 @@ exports.push([module.i, ".md-elevation-z0 {\n  box-shadow: 0px 0px 0px 0px rgba(
 
 /***/ },
 
-/***/ 796:
+/***/ 804:
 /***/ function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(445)();
+exports = module.exports = __webpack_require__(260)();
 // imports
 
 
 // module
-exports.push([module.i, "/* Remove the navbar's default margin-bottom and rounded borders */\n.navbar {\n    margin-bottom: 0;\n    border-radius: 0;\n}\n\n/* Set height of the grid so .sidenav can be 100% (adjust as needed) */\n.row.content {\n    background-image: url('/assets/img/Burg_bg_light.jpg');\n    background-size: 320px;\n    background-position: center;\n    background-repeat: no-repeat;\n    min-height: 800px;}\n.navbar-brand{\n    font-family:\"American Typewriter\", serif;\n    font-size: 28px;\n}\n/* Set gray background color and 100% height\n.sidenav {\n    padding-top: 20px;\n    background-color: #f1f1f1;\n    height: 100%;\n}*/\n\n/* Set black background color, white text and some padding */\nfooter {\n    background-color: #555;\n    color: white;\n    padding: 15px;\n}\n\n/* On small screens, set height to 'auto' for sidenav and grid */\n@media screen and (max-width: 767px) {\n    .sidenav {\n        height: auto;\n        padding: 15px;\n    }\n    .row.content {height:auto;}\n}\nbody{\n    font-family:'Varela Round', sans-serif;\n}\n.col-sm-8{\n    padding:15px;\n}", ""]);
+exports.push([module.i, "/* Remove the navbar's default margin-bottom and rounded borders */\n.navbar {\n    margin-bottom: 0;\n    border-radius: 0;\n}\n\n/* Set height of the grid so .sidenav can be 100% (adjust as needed) */\n.row.content {\n    background-image: url('/assets/img/Burg_bg_light.jpg');\n    background-size: 320px;\n    background-position: center;\n    background-repeat: no-repeat;\n    min-height: 800px;}\n.navbar-brand{\n    font-family:\"American Typewriter\", serif;\n}\n/* Set gray background color and 100% height\n.sidenav {\n    padding-top: 20px;\n    background-color: #f1f1f1;\n    height: 100%;\n}*/\n\n/* Set black background color, white text and some padding */\nfooter {\n    background-color: #555;\n    color: white;\n    padding: 15px;\n}\n\n/* On small screens, set height to 'auto' for sidenav and grid */\n@media screen and (max-width: 767px) {\n    .sidenav {\n        height: auto;\n        padding: 15px;\n    }\n    .row.content {height:auto;}\n}\nbody{\n    font-family:'Varela Round', sans-serif;\n}\n.col-sm-8{\n    padding:15px;\n}", ""]);
 
 // exports
 
 
 /***/ }
 
-},[1094]);
+},[1104]);
 //# sourceMappingURL=styles.map
