@@ -145,6 +145,16 @@ router.get('/api/employees', apiResponse(db.listEmployees));
 router.put('/api/employee', apiResponse(db.addEmployee, true,[(req)=>req.body]));
 router.delete('/api/employee/:id', apiResponse(db.deleteEmployee, true, [req=>req.params.id]));
 router.post('/api/employee/:id', apiResponse(db.updateEmployee, true, [req=>req.params.id, req=>req.body]));
+/* Lock branch for user */
+router.get('/api/lock/:bid/:uid', apiResponse(db.lockBranch,false,[req=>req.params.bid,req=>req.params.uid,req=>req.user]));
+router.get('/api/lock/:bid/:uid', apiResponse(db.unlockBranch,false,[req=>req.params.bid,req=>req.params.uid,req=>req.user]))
+/* Worktime */
+router.get('/api/t/:bid/:date', apiResponse(db.getWorktimes, false, [req=>req.params.bid,req=>req.params.date]));
+router.put('/api/t/:bid/:eid', apiResponse(db.startWork, false, [req=>req.params.bid,req=>req.params.eid,req=>req.body,req=>req.user]));
+router.post('/api/t/:wtid', apiResponse(db.endWork, false, [req=>req.params.wtid,req=>req.body,req=>req.user]));
+router.delete('/api/t/:wtid', apiResponse(db.cancelWork, false, [req=>req.params.wtid,req=>req.user]));
+/* Report */
+router.get('/api/report/:bid/:eid', apiResponse(db.report),[req=>req.params.bid, req=>req.params.eid])
 router.all("*",function(req,res){
     console.log('[TRACE] Server 404 request: '+req.originalUrl);
     var p = path.join(__dirname, 'public', 'index.html').replace(/\/routes\//,'/');
