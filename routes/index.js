@@ -88,8 +88,14 @@ router.get('/session', function(req, res, next){
 });
 
 router.get('/logout',function(req, res){
-  req.logout();
-  res.sendStatus(200);
+  db.unlockBranches(req.user)
+    .then(function(){
+      req.logout();
+      res.sendStatus(200);
+    })
+  .catch(function(err){
+      res.status(500).send(err.message);
+  })
 });
 
 //checks to be sure users are authenticated
@@ -146,15 +152,17 @@ router.put('/api/employee', apiResponse(db.addEmployee, true,[(req)=>req.body]))
 router.delete('/api/employee/:id', apiResponse(db.deleteEmployee, true, [req=>req.params.id]));
 router.post('/api/employee/:id', apiResponse(db.updateEmployee, true, [req=>req.params.id, req=>req.body]));
 /* Lock branch for user */
-router.get('/api/lock/:bid/:uid', apiResponse(db.lockBranch,false,[req=>req.params.bid,req=>req.params.uid,req=>req.user]));
-router.get('/api/lock/:bid/:uid', apiResponse(db.unlockBranch,false,[req=>req.params.bid,req=>req.params.uid,req=>req.user]))
+router.get('/api/lock/:bid', apiResponse(db.lockBranch,false,[req=>req.params.bid,req=>req.user]));
+router.delete('/api/lock/', apiResponse(db.unlockBranch,false,[req=>req.user]));
+router.get('/api/islocked/:bid', apiResponse(db.isLocked,false,[req=>req.params.bid, req=>req.user]))
 /* Worktime */
 router.get('/api/t/:bid/:date', apiResponse(db.getWorktimes, false, [req=>req.params.bid,req=>req.params.date]));
 router.put('/api/t/:bid/:eid', apiResponse(db.startWork, false, [req=>req.params.bid,req=>req.params.eid,req=>req.body,req=>req.user]));
 router.post('/api/t/:wtid', apiResponse(db.endWork, false, [req=>req.params.wtid,req=>req.body,req=>req.user]));
 router.delete('/api/t/:wtid', apiResponse(db.cancelWork, false, [req=>req.params.wtid,req=>req.user]));
 /* Report */
-router.get('/api/report/:bid/:eid', apiResponse(db.report),[req=>req.params.bid, req=>req.params.eid])
+router.get('/api/report/:bid/:eid', apiResponse(db.report,false,[req=>req.params.bid, req=>req.params.eid,req=>req.query]));
+/* Diverting unknown routes to Angular router */
 router.all("*",function(req,res){
     console.log('[TRACE] Server 404 request: '+req.originalUrl);
     var p = path.join(__dirname, 'public', 'index.html').replace(/\/routes\//,'/');
