@@ -120,6 +120,14 @@ function addBranch(name){
     })
 }
 
+function updateBranch(id,name){
+  return new promise(function(resolve,reject){
+    db.query("update branches set name=$1 where bid=$2",[name, id])
+      .then(function(){resolve('updated.')})
+      .catch(function(err){console.log(err.message,err);reject(err.message);})
+  })
+}
+
 function deleteBranch(bid){
     return new promise(function(resolve,reject){
         console.log(bid);
@@ -462,6 +470,7 @@ module.exports = {
     listBranches:       listBranches,
     addBranch:          addBranch,
     deleteBranch:       deleteBranch,
+    updateBranch:       updateBranch,
     listUsers:          listUsers,
     addUser:            addUser,
     deleteUser:         deleteUser,

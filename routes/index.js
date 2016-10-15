@@ -140,6 +140,7 @@ function apiResponse(dbPromise, adminOnly, reqFuncs){
 /* Branches */
 router.get('/api/branches', apiResponse(db.listBranches));
 router.put('/api/branch', apiResponse(db.addBranch, true, [(req)=>req.body.name]));
+router.post('/api/branch/:id',apiResponse(db.updateBranch, true,[req=>req.params.id, req=>req.body.name]));
 router.delete('/api/branch/:id', apiResponse(db.deleteBranch, true, [(req)=>parseInt(req.params.id)]));
 /* Users */
 router.get('/api/user/:id', apiResponse(db.getSingleUser,[function(req){return parseInt(req.params.id);}],'uid'));
