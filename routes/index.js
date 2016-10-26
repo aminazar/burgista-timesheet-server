@@ -158,7 +158,7 @@ router.delete('/api/lock/', apiResponse(db.unlockBranch,false,[req=>req.user]));
 router.get('/api/islocked/:bid', apiResponse(db.isLocked,false,[req=>req.params.bid, req=>req.user]))
 /* Worktime */
 router.get('/api/t/:bid/:date', apiResponse(db.getWorktimes, false, [req=>req.params.bid,req=>req.params.date]));
-router.put('/api/t/:bid/:eid', apiResponse(db.startWork, false, [req=>req.params.bid,req=>req.params.eid,req=>req.body,req=>req.user]));
+router.put('/api/t/:bid/:eid', apiResponse(db.addWork, false, [req=>req.params.bid,req=>req.params.eid,req=>req.body,req=>req.user]));
 router.post('/api/t/:wtid', apiResponse(db.updateWork, false, [req=>req.params.wtid,req=>req.body,req=>req.user]));
 router.delete('/api/t/:wtid', apiResponse(db.cancelWork, false, [req=>req.params.wtid,req=>req.user]));
 /* No Break */
