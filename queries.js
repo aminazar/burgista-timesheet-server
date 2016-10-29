@@ -328,7 +328,7 @@ function isLocked(bid,user){
           if (data[0].id === user.toLowerCase()) {
             data[0].id = 'You';
           }
-          resolve(data[0].id);
+          resolve(data[0]);
         }
         else
           resolve('');
