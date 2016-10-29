@@ -543,6 +543,7 @@ function cancelWork(wtid,user){
   });
 }
 function report(bid,eid,values){
+  values.end = moment(values.end).add(1,'d').format('YYYY-MM-DD');
   return new promise(function(resolve,reject){
     if(bid==='ALL'){
       if(eid==='ALL'){
@@ -562,7 +563,16 @@ function report(bid,eid,values){
       }
     }
     else if(eid==='ALL'){
-
+      db.any('select e.eid,firstname,surname,rate,hours,mins,breaks from employees e,' +
+        "(select eid,bid,sum(extract(minute from end_time-start_time)) as mins, sum(extract(hour from end_time-start_time)) as hours, sum(breaktime) as breaks " +
+        "from worktime where end_time<'infinity' and start_time >= $2 and start_time < $3 group by eid,bid) s where s.bid=$1 and e.eid=s.eid order by surname,firstname", [bid,values.start,values.end])
+        .then(function(data){
+          resolve(data)
+        })
+        .catch(function(err){
+          console.log(err.message,err);
+          reject(err.message);
+        })
     }
     else{
 

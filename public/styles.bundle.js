@@ -1,13 +1,13 @@
 webpackJsonp([1,2],{
 
-/***/ 1121:
+/***/ 1114:
 /***/ function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__.p + "faf21a5b16a31044b5e40569820a78cf.ttf";
 
 /***/ },
 
-/***/ 1128:
+/***/ 1121:
 /***/ function(module, exports, __webpack_require__) {
 
 __webpack_require__(495);
@@ -333,7 +333,7 @@ function updateLink(linkElement, obj) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(813);
+var content = __webpack_require__(810);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(277)(content, {});
@@ -360,7 +360,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(814);
+var content = __webpack_require__(811);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(277)(content, {});
@@ -387,7 +387,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(815);
+var content = __webpack_require__(812);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(277)(content, {});
@@ -408,7 +408,7 @@ if(false) {
 
 /***/ },
 
-/***/ 813:
+/***/ 810:
 /***/ function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(263)();
@@ -423,7 +423,7 @@ exports.push([module.i, "md-card {\n  display: block;\n  position: relative;\n  
 
 /***/ },
 
-/***/ 814:
+/***/ 811:
 /***/ function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(263)();
@@ -438,7 +438,7 @@ exports.push([module.i, ".md-elevation-z0 {\n  box-shadow: 0px 0px 0px 0px rgba(
 
 /***/ },
 
-/***/ 815:
+/***/ 812:
 /***/ function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(263)();
@@ -446,12 +446,12 @@ exports = module.exports = __webpack_require__(263)();
 
 
 // module
-exports.push([module.i, "/* Remove the navbar's default margin-bottom and rounded borders */\n.navbar {\n    margin-bottom: 0;\n    border-radius: 0;\n}\n\n/* Set height of the grid so .sidenav can be 100% (adjust as needed) */\n.row.content {\n    background-image: url('/assets/img/Burg_bg_light.jpg');\n    background-size: 320px;\n    background-position: center;\n    background-repeat: no-repeat;\n    min-height: 800px;}\n.navbar-brand{\n    font-family:\"American Typewriter\", serif;\n}\n/* Set gray background color and 100% height\n.sidenav {\n    padding-top: 20px;\n    background-color: #f1f1f1;\n    height: 100%;\n}*/\n\n/* Set black background color, white text and some padding */\nfooter {\n    background-color: #555;\n    color: white;\n    padding: 15px;\n}\n\n/* On small screens, set height to 'auto' for sidenav and grid */\n@media screen and (max-width: 767px) {\n    .sidenav {\n        height: auto;\n        padding: 15px;\n    }\n    .row.content {height:auto;}\n}\nbody{\n    font-family:'Varela Round', sans-serif;\n}\n.col-sm-8{\n    padding:15px;\n}\n@font-face{\n    font-family:'digital-clock-font';\n    src: url(" + __webpack_require__(1121) + ");\n}", ""]);
+exports.push([module.i, "/* Remove the navbar's default margin-bottom and rounded borders */\n.navbar {\n    margin-bottom: 0;\n    border-radius: 0;\n}\n\n/* Set height of the grid so .sidenav can be 100% (adjust as needed) */\n.row.content {\n    background-image: url('/assets/img/Burg_bg_light.jpg');\n    background-size: 320px;\n    background-position: center;\n    background-repeat: no-repeat;\n    min-height: 800px;}\n.navbar-brand{\n    font-family:\"American Typewriter\", serif;\n}\n/* Set gray background color and 100% height\n.sidenav {\n    padding-top: 20px;\n    background-color: #f1f1f1;\n    height: 100%;\n}*/\n\n/* Set black background color, white text and some padding */\nfooter {\n    background-color: #555;\n    color: white;\n    padding: 15px;\n}\n\n/* On small screens, set height to 'auto' for sidenav and grid */\n@media screen and (max-width: 767px) {\n    .sidenav {\n        height: auto;\n        padding: 15px;\n    }\n    .row.content {height:auto;}\n}\nbody{\n    font-family:'Varela Round', sans-serif;\n}\n.col-sm-8{\n    padding:15px;\n}\n@font-face{\n    font-family:'digital-clock-font';\n    src: url(" + __webpack_require__(1114) + ");\n}", ""]);
 
 // exports
 
 
 /***/ }
 
-},[1128]);
+},[1121]);
 //# sourceMappingURL=styles.map
