@@ -177,13 +177,15 @@ function deleteUser(uid){
     return new promise(function(resolve,reject){
         console.log(uid);
         db.result("delete from pwdresets where uid=$1", [parseInt(uid)])
-            .then(()=> {
+            .then(function() {
                 db.result("delete from users where uid=$1", [parseInt(uid)])
                 .then(function (res) {
                     resolve(res.rowCount)
                 })
                 .catch(function (err) {
-                    reject(err.message)
+                    db.result("update users set secret='' where uid=$1",[uid])
+                      .then(function(res){resolve(res.rwoCount)})
+                      .catch(function(err2){reject('failed to delete user: ' + err.message + '\nFurthermore, failed to deactivate the password:' + err2.message)});
                 });
             })
             .catch(function (err) {
