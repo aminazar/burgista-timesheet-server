@@ -204,7 +204,9 @@ function addEmployee(values){
       for(k in values) {
         lvalues[k] = (k.indexOf('name')>=0) ? values[k].toLowerCase() : lvalues[k] = values[k];
       }
-      db.any("select * from employees where eid<>${eid} and lower(firstname)=${firstname} and lower(surname)=${surname} and (contract_date,contract_end) overlaps (${contract_date},${end_date})", lvalues)
+      lvalues.eid = lvalues.eid ? lvalues.eid : 0;
+
+      db.any("select * from employees where eid<>${eid} and lower(firstname)=${firstname} and lower(surname)=${surname} and (contract_date,contract_end) overlaps (${contract_date},${contract_end})", lvalues)
         .then(function (data) {
           if (data.length) {
             reject('Overlaps with employee with the same name with eid:' + data[0].eid + ' contract starting' + data[0].contract_date + ' ending:' + data[0].contract_end);
@@ -238,7 +240,9 @@ function updateEmployee(eid, values){
       for(k in values) {
         lvalues[k] = (k.indexOf('name')>=0) ? values[k].toLowerCase() : lvalues[k] = values[k];
       }
-      db.any("select * from employees where eid!<>${eid} and lower(firstname)=${firstname} and lower(surname)=${surname} and (contract_date,contract_end) overlaps (${contract_date},${end_date})", lvalues)
+      lvalues.eid = eid ? eid : 0;
+
+      db.any("select * from employees where eid<>${eid} and lower(firstname)=${firstname} and lower(surname)=${surname} and (contract_date,contract_end) overlaps (${contract_date},${contract_end})", lvalues)
         .then(function (data) {
           if (data.length) {
             reject('Overlaps with employee with the same name with eid:' + data[0].eid + ' contract starting' + data[0].contract_date + ' ending:' + data[0].contract_end);
