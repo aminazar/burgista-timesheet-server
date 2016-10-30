@@ -209,7 +209,7 @@ function addEmployee(values){
       db.any("select * from employees where eid<>${eid} and lower(firstname)=${firstname} and lower(surname)=${surname} and (contract_date,contract_end) overlaps (${contract_date},${contract_end})", lvalues)
         .then(function (data) {
           if (data.length) {
-            reject('Overlaps with employee with the same name with eid:' + data[0].eid + ' contract starting' + data[0].contract_date + ' ending:' + data[0].contract_end);
+            reject('Overlaps with employee with the same name with eid: ' + data[0].eid + ', contract starting: ' + moment(data[0].contract_date).format('DD MMM YY') + (moment(data[0].contract_end).isValid() ? ', ending: ' + moment(data[0].contract_end).format('DD MMM YY') : ' and still in contract'));
           }
           else {
             db.one(pgp.helpers.insert(values, null, 'employees') + ' returning eid')
@@ -226,8 +226,8 @@ function deleteEmployee(eid){
         db.result("delete from employees where eid=$1",[parseInt(eid)])
             .then((res)=>resolve(res.rowCount))
             .catch(err=> {
-                db.query("update employees set contract_end=current_date+1 where eid=$",[id])
-                    .then(()=>resolve(1))
+                db.query("update employees set contract_end=least((select contract_end from employees where eid=$1),current_date) where eid=$1",[eid])
+                    .then(()=>resolve(-1))
                     .catch(err2=>reject('Failed deleting employee: '+err.message + '\ncould not update contract end too: ' + err2.message));
             });
 
@@ -245,7 +245,7 @@ function updateEmployee(eid, values){
       db.any("select * from employees where eid<>${eid} and lower(firstname)=${firstname} and lower(surname)=${surname} and (contract_date,contract_end) overlaps (${contract_date},${contract_end})", lvalues)
         .then(function (data) {
           if (data.length) {
-            reject('Overlaps with employee with the same name with eid:' + data[0].eid + ' contract starting' + data[0].contract_date + ' ending:' + data[0].contract_end);
+            reject('Overlaps with employee with the same name with eid: ' + data[0].eid + ', contract starting: ' + moment(data[0].contract_date).format('DD MMM YY') + (moment(data[0].contract_end).isValid() ? ', ending: ' + moment(data[0].contract_end).format('DD MMM YY') : ' and still in contract'));
           }
           else {
             var newEid;
