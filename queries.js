@@ -106,7 +106,7 @@ function deleteResetPassword(id){
 
 function listBranches(){
     return new promise(function(resolve,reject){
-        db.any("select * from branches")
+        db.any("select bid,name,true as active,false as pending from branches")
             .then(function(res){resolve(res)})
             .catch(function(err){reject(err.message)});
     })
@@ -141,7 +141,7 @@ function deleteBranch(bid){
 
 function listUsers(){
     return new promise(function(resolve,reject){
-        db.any("select uid,id from users where lower(id)<>'admin'")
+        db.any("select users.uid,users.id,cast(length(secret) as boolean) as active,count(pwdresets.id) as pending from users left outer join pwdresets on users.uid=pwdresets.uid where lower(users.id)<>'admin' group by users.uid")
             .then(function(res){resolve(res)})
             .catch(function(err){reject(err.message)});
     })
@@ -151,26 +151,42 @@ function addUser(email,link){
         var uid = '';
         var id = email;
         db.one("insert into users(id) values($1) returning uid", [ email.toLowerCase() ] )
-            .then(function(res){
-                uid = res.uid;
-                insertResetPassword(uid)
-                    .then(function(hash){
-                        var email = id.toLowerCase();
-                        link += hash;
-                        mailer(email,link)
-                            .then(()=>resolve(uid))
-                            .catch(function(error){
-                                db.none('delete from pwdresets where uid=$1',[uid])
-                                    .then(()=>{
-                                        db.none('delete from users where uid=$1',[uid])
-                                        .then(function(){reject('Sending email to set password failed: ' + error.message);})
-                                        .catch((error2)=>reject('Sending email to set password failed: ' + error.message + '. Furthermore, could not delete from db: '+ error2.message));
-                                })
-                                .catch(function(error2){reject('Sending email to set password failed: ' + error.message + '. Furthermore, could not delete from db: '+ error2.message);});
-                            })
-                    })})
-            .catch(function(err){reject(err.message)});
+            .then(function(res){mailResetPassword(res.uid,{email:id}).then(resolve).catch(reject)})
+            .catch(function(err){reject('could not insert ' + email + ' in users: ' + err.message)});
     })
+}
+
+function mailResetPassword(uid,values,link) {
+  return new promise(function(resolve,reject) {
+    insertResetPassword(uid)
+      .then(function (hash) {
+        var email = values.email.toLowerCase();
+        link += hash;
+        mailer(email, link)
+          .then(function () {
+            resolve(uid)
+          })
+          .catch(function (error) {
+            db.none('delete from pwdresets where uid=$1', [uid])
+              .then(function () {
+                db.none('delete from users where uid=$1', [uid])
+                  .then(function () {
+                    reject('Sending email to set password failed: ' + error.message);
+                  })
+                  .catch(function (error2) {
+                    reject('Sending email to set password failed: ' + error.message + '. Furthermore, could not delete from db: ' + error2.message)
+                  });
+                ;
+              })
+              .catch(function (error2) {
+                reject('Sending email to set password failed: ' + error.message + '. Furthermore, could not delete from db: ' + error2.message);
+              });
+          })
+      })
+      .catch(function (err) {
+        reject(err.message||err)
+      });
+  });
 }
 
 function deleteUser(uid){
@@ -184,7 +200,7 @@ function deleteUser(uid){
                 })
                 .catch(function (err) {
                     db.result("update users set secret='' where uid=$1",[uid])
-                      .then(function(res){resolve(res.rwoCount)})
+                      .then(function(res){resolve(-1)})
                       .catch(function(err2){reject('failed to delete user: ' + err.message + '\nFurthermore, failed to deactivate the password:' + err2.message)});
                 });
             })
@@ -649,6 +665,7 @@ module.exports = {
   updateBranch: updateBranch,
   listUsers: listUsers,
   addUser: addUser,
+  mailResetPassword: mailResetPassword,
   deleteUser: deleteUser,
   listEmployees: listEmployees,
   addEmployee: addEmployee,

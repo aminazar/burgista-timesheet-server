@@ -147,6 +147,7 @@ router.get('/api/user/:id', apiResponse(db.getSingleUser,[function(req){return p
 router.get('/api/users', apiResponse(db.listUsers));
 router.put('/api/user', apiResponse(db.addUser, true, [(req)=>req.body.id,(req)=>req.protocol + '://' + req.get('host') + '/reset/']));
 router.delete('/api/user/:id', apiResponse(db.deleteUser, true, [function(req){return parseInt(req.params.id);}]));
+router.put('/api/reset/:uid',apiResponse(db.mailResetPassword,true,[req=>req.params.uid,req=>req.body,(req)=>req.protocol + '://' + req.get('host') + '/reset/']))
 /* Employee */
 router.get('/api/employees', apiResponse(db.listEmployees));
 router.put('/api/employee', apiResponse(db.addEmployee, true,[(req)=>req.body]));
