@@ -5,13 +5,6 @@ var passport = require('passport');
 var db = require('../queries');
 var mailer = require('../pwdresetmailer');
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  if(!req.user)
-      res.redirect('/login');
-  else
-      res.render('index', { title: 'Express', user: JSON.stringify(req.user) });
-});
 
 router.post('/login', function(req, res, next) {
     if(req.body.forget){ //Send a 'reset password' link through email
