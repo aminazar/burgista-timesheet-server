@@ -38,7 +38,8 @@ function validPassword(data, password){
     }))
 }
 
-function bCryptHashPromise(val){
+function bCryptHashPromise(val,replaceWS){
+    replaceWS = replaceWS!==undefined?replaceWS:true;
     return new promise(function(resolve, reject){
         val = val || ((new Date()) * 1 + '' );
         bCrypt.genSalt(101, function(err, salt) {
@@ -49,7 +50,7 @@ function bCryptHashPromise(val){
                 if(err)
                     reject(err);
                 else
-                    resolve(hash.replace(/[^\w\s]/gi, ''));
+                    resolve(replaceWS?hash.replace(/[^\w\s]/gi, ''):hash);
             });
         });
 
@@ -65,10 +66,10 @@ function insertResetPassword(userid){
             })
             .then(function(){
                 db.result("insert into pwdresets(uid, id) values($1, $2)", [userid, hashG])
-                    .then(()=>{
+                    .then(function(){
                         onSuccess(hashG);
                     })
-                    .catch((err)=>onError(err.message||err));
+                    .catch(function(err){onError(err.message||err)});
             })
             .catch(function (error) {
                 onError(error.message || error)
@@ -146,12 +147,21 @@ function listUsers(){
             .catch(function(err){reject(err.message)});
     })
 }
-function addUser(email,link){
+function addUser(email,hash){
     return new promise(function(resolve,reject){
         var uid = '';
         var id = email;
-        db.one("insert into users(id) values($1) returning uid", [ email.toLowerCase() ] )
-            .then(function(res){mailResetPassword(res.uid,{email:id}).then(resolve).catch(reject)})
+        hash = (hash===undefined)?'':hash;
+        var values = {id:email.toLowerCase(),secret:hash};
+        db.one(pgp.helpers.insert(values, null, 'users') + ' returning uid')
+            .then(function(res){
+              if(id.indexOf('@')===-1) {
+                resolve(res.uid);
+              }
+              else {
+                mailResetPassword(res.uid, {email: id}).then(resolve).catch(reject);
+              }
+            })
             .catch(function(err){reject('could not insert ' + email + ' in users: ' + err.message)});
     })
 }
@@ -211,19 +221,36 @@ function deleteUser(uid){
 }
 function listEmployees(){
     return new promise(function(resolve,reject){
-       db.any('select * from employees order by contract_end desc,contract_date asc')
-           .then(res=>resolve(res))
-           .catch(err=>reject('Failed listing employees: ' + err.message));
+       db.any('select * from employees order by contract_end desc,firstname asc,surname asc')
+           .then(function(res){resolve(res)})
+           .catch(function(err){reject('Failed listing employees: ' + err.message)});
     });
 }
+function addManagerEmployee(values){
+  return new promise(function(resolve,reject) {
+    bCryptHashPromise(values.password)
+      .then(function(hash){
+        addUser(values.username,hash)
+          .then(function(uid){
+            values.uid = uid;
+            delete values.username;
+            delete values.password;
+            addEmployee(values).then(resolve).catch(reject);
+          })
+          .catch(function(err){reject('Failed adding user: ' + (err||err.message))});
+      })
+      .catch(function(err){reject('Failed bcrypt: ' + (err||err.message))});
+  })
+}
+
 function addEmployee(values){
     return new promise(function(resolve,reject) {
       var lvalues = {}; //lvaluse conains lowercase values of name, in order to check if an employee with a same name has contract overlap
       for(k in values) {
-        lvalues[k] = (k.indexOf('name')>=0) ? values[k].toLowerCase() : lvalues[k] = values[k];
+        lvalues[k] = (k.indexOf('name')>=0) ? values[k].toLowerCase() : values[k];
       }
       lvalues.eid = lvalues.eid ? lvalues.eid : 0;
-
+      lvalues.uid = lvalues.uid ? lvalues.uid : null;
       db.any("select * from employees where eid<>${eid} and lower(firstname)=${firstname} and lower(surname)=${surname} and (contract_date,contract_end) overlaps (${contract_date},${contract_end})", lvalues)
         .then(function (data) {
           if (data.length) {
@@ -242,11 +269,11 @@ function addEmployee(values){
 function deleteEmployee(eid){
     return new promise(function(resolve,reject){
         db.result("delete from employees where eid=$1",[parseInt(eid)])
-            .then((res)=>resolve(res.rowCount))
-            .catch(err=> {
+            .then(function(res){resolve(res.rowCount)})
+            .catch(function(err) {
                 db.query("update employees set contract_end=least((select contract_end from employees where eid=$1),current_date) where eid=$1",[eid])
-                    .then(()=>resolve(-1))
-                    .catch(err2=>reject('Failed deleting employee: '+err.message + '\ncould not update contract end too: ' + err2.message));
+                    .then(function(){resolve(-1)})
+                    .catch(function(err2){reject('Failed deleting employee: '+err.message + '\ncould not update contract end too: ' + err2.message)});
             });
 
     });
@@ -571,7 +598,7 @@ function report(bid,eid,values){
       if(eid==='ALL'){
         db.any('select e.eid,firstname,surname,rate,hours,mins,breaks from employees e,' +
                "(select eid,sum(extract(minute from end_time-start_time)) as mins, sum(extract(hour from end_time-start_time)) as hours, sum(breaktime) as breaks " +
-               "from worktime where end_time<'infinity' and start_time >= $1 and start_time < $2 group by eid) s where e.eid=s.eid order by surname,firstname", [values.start,values.end])
+               "from worktime where end_time<'infinity' and start_time >= $1 and start_time < $2 group by eid) s where e.eid=s.eid order by firstname,surname", [values.start,values.end])
           .then(function(data){
             resolve(data)
           })
@@ -587,7 +614,7 @@ function report(bid,eid,values){
     else if(eid==='ALL'){
       db.any('select e.eid,firstname,surname,rate,hours,mins,breaks from employees e,' +
         "(select eid,bid,sum(extract(minute from end_time-start_time)) as mins, sum(extract(hour from end_time-start_time)) as hours, sum(breaktime) as breaks " +
-        "from worktime where end_time<'infinity' and start_time >= $2 and start_time < $3 group by eid,bid) s where s.bid=$1 and e.eid=s.eid order by surname,firstname", [bid,values.start,values.end])
+        "from worktime where end_time<'infinity' and start_time >= $2 and start_time < $3 group by eid,bid) s where s.bid=$1 and e.eid=s.eid order by firstname,surname", [bid,values.start,values.end])
         .then(function(data){
           resolve(data)
         })
@@ -665,6 +692,7 @@ module.exports = {
   updateBranch: updateBranch,
   listUsers: listUsers,
   addUser: addUser,
+  addManager: addManagerEmployee,
   mailResetPassword: mailResetPassword,
   deleteUser: deleteUser,
   listEmployees: listEmployees,
