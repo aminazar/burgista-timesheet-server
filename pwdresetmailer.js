@@ -4,7 +4,7 @@
 var promise = require('bluebird');
 var nodemailer = require('nodemailer');
 
-function mailer(email,link) {
+function mailer(email,link,user) {
     // create reusable transporter object using the default SMTP transport
     var transporter = nodemailer.createTransport('smtps://burgistats%40gmail.com:Am1rM0nfar3d@smtp.gmail.com');
 
@@ -14,7 +14,7 @@ function mailer(email,link) {
         to: email, // list of receivers
         subject: 'Reset your password in Burgista timesheet app', // Subject line
         text: 'Reset your password through this link: ' + link, // plaintext body
-        html: '<p>Reset your password through <a href="' + link + '">this link</a>.</p>' // html body
+        html: '<p>Reset '+(user===email?'your':user +"'s")+' password through <a href="' + link + '">this link</a>.</p>' // html body
     };
 
     // send mail with defined transport object

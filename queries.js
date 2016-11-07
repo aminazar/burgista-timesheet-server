@@ -147,7 +147,7 @@ function updateBranch(id, name) {
   return new promise(function (resolve, reject) {
     db.query("update branches set name=$1 where bid=$2", [name, id])
       .then(function () {
-        resolve('updated.')
+        resolve()
       })
       .catch(function (err) {
         console.log(err.message, err);
@@ -180,7 +180,7 @@ function listUsers() {
       });
   })
 }
-function addUser(email, hash) {
+function addUser(email, hash, link) {
   return new promise(function (resolve, reject) {
     var uid = '';
     hash = (hash === undefined) ? '' : hash;
@@ -196,7 +196,7 @@ function addUser(email, hash) {
             resolve(res.uid);
           }
           else {
-            mailResetPassword(res.uid, {email: email}).then(resolve).catch(reject);
+            mailResetPassword(res.uid, {email: email,user: email},link).then(resolve).catch(reject);
           }
         })
         .catch(function (err) {
@@ -211,36 +211,48 @@ function mailResetPassword(uid, values, link) {
     insertResetPassword(uid)
       .then(function (hash) {
         var email = values.email.toLowerCase();
+        var user  = values.user.toLowerCase();
         link += hash;
-        mailer(email, link)
-          .then(function () {
-            resolve(uid)
-          })
-          .catch(function (error) {
-            db.none('delete from pwdresets where uid=$1', [uid])
-              .then(function () {
-                db.none('delete from users where uid=$1', [uid])
-                  .then(function () {
-                    reject('Sending email to set password failed: ' + error.message);
-                  })
-                  .catch(function (error2) {
-                    reject('Sending email to set password failed: ' + error.message + '. Furthermore, could not delete from db: ' + error2.message)
-                  });
-              })
-              .catch(function (error2) {
-                reject('Sending email to set password failed: ' + error.message + '. Furthermore, could not delete from db: ' + error2.message);
-              });
-          })
+        if(email.indexOf('@')===-1)
+          resolve(link);
+        else {
+          mailer(email, link, user)
+            .then(function () {
+              resolve(uid)
+            })
+            .catch(function (error) {
+              db.none('delete from pwdresets where uid=$1', [uid])
+                .then(function () {
+                  db.none('delete from users where uid=$1', [uid])
+                    .then(function () {
+                      reject('Sending email to set password failed: ' + error.message);
+                    })
+                    .catch(function (error2) {
+                      reject('Sending email to set password failed: ' + error.message + '. Furthermore, could not delete from db: ' + error2.message)
+                    });
+                })
+                .catch(function (error2) {
+                  reject('Sending email to set password failed: ' + error.message + '. Furthermore, could not delete from db: ' + error2.message);
+                });
+            })
+        }
       })
       .catch(function (err) {
         reject(err.message || err)
       });
   });
 }
-
+function updateUser(uid,values,link){
+  return new promise(function (resolve, reject) {
+    db.query("update users set secret='', id=$1 where uid=$2",[values.id,uid])
+      .then(function(){
+        mailResetPassword(uid,{email:values.id,user:values.firstname + ' ' + values.surname},link).then(resolve).catch(reject);
+      })
+      .catch(function(err){reject(err)});
+  });
+}
 function deleteUser(uid) {
   return new promise(function (resolve, reject) {
-    console.log(uid);
     db.result("delete from pwdresets where uid=$1", [parseInt(uid)])
       .then(function () {
         db.result("delete from users where uid=$1", [parseInt(uid)])
@@ -264,7 +276,7 @@ function deleteUser(uid) {
 }
 function listEmployees() {
   return new promise(function (resolve, reject) {
-    db.any('select * from employees order by contract_end desc,firstname asc,surname asc')
+    db.any('select eid,firstname,surname,rate,role,contract_date,contract_end,id as username from employees left outer join users on users.uid=employees.uid order by contract_end desc,firstname asc,surname asc')
       .then(function (res) {
         resolve(res)
       })
@@ -273,16 +285,18 @@ function listEmployees() {
       });
   });
 }
-function addManagerEmployee(values) {
+function addManagerEmployee(values,link) {
   return new promise(function (resolve, reject) {
     bCryptHashPromise(values.password, false, false)
       .then(function (hash) {
-        addUser(values.username, hash)
+        addUser(values.username, hash,link)
           .then(function (uid) {
             values.uid = uid;
             delete values.username;
             delete values.password;
-            addEmployee(values).then(resolve).catch(reject);
+            addEmployee(values).then(resolve).catch(function(err){
+              deleteUser(uid).then(function(){reject(err)});
+            });
           })
           .catch(function (err) {
             reject('Failed adding user: ' + (err || err.message))
@@ -664,6 +678,7 @@ module.exports = {
   deleteBranch: deleteBranch,
   updateBranch: updateBranch,
   listUsers: listUsers,
+  updateUser: updateUser,
   addUser: addUser,
   addManager: addManagerEmployee,
   mailResetPassword: mailResetPassword,
