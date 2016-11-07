@@ -492,96 +492,13 @@ function getWorktimes(bid, date) {
     var today = date;
     var tomorrow = moment.utc(date).add(1, 'd').format('YYYY-MM-DD');
 
-    db.any("select e.eid, e.firstname, e.surname, w.wtid, u.id as updated_by, start_time, end_time, breaktime,cast(nbd.eid as boolean) as nobreak " +
+    db.any("select e.eid, e.firstname, e.surname, w.wtid, u.id as updated_by, start_time, end_time, breaktime,nobreak " +
       "from employees e " +
       "left outer join worktime w on w.eid=e.eid and w.bid=${bid} and w.start_time >= timestamp ${today} and w.start_time < timestamp ${tomorrow} " +
       "left outer join users u on w.uid=u.uid " +
-      "left outer join nobreakdate nbd on nbd.eid=e.eid and w.bid=nbd.bid and nbd.date=${today} " +
       "where e.contract_date <= ${today} and e.contract_end > ${today}", {today: today, tomorrow: tomorrow, bid: bid})
       .then(function (data) {
         resolve(data);
-      })
-      .catch(function (err) {
-        console.log(err.message, err);
-        reject(err.message);
-      });
-  });
-}
-
-function startWork(bid, eid, values, user) {
-  return new promise(function (resolve, reject) {
-    db.any("select b.name,w.start_time,w.end_time from employees e, worktime w, branches b where e.eid=w.eid and w.bid=b.bid and e.eid=$1 and (w.start_time,w.end_time) overlaps ($2,$3)", [eid, values.start, moment(values.start).add(1, 'm').format()])
-      .then(function (data) {
-        if (data.length) {
-          reject('Overlaps with the same employee\'s worktime at ' + data[0].name + ' branch: started at ' + moment(data[0].start_time).format('ddd, HH:mm') + ( data[0].end_time !== 'infinity' ? ' to ' + moment(data[0].end_time).format('ddd, HH:mm') : ' and still working'));
-        }
-        else {
-          db.any("select u.id,l.ltime from users u, branch_lock l where u.uid=l.uid and u.id<>$1 and l.bid=$2 and l.ltime>current_timestamp - interval '18 hours'", [user.toLowerCase(), bid])
-            .then(function (lock) {
-              if (lock.lenth) {
-                reject('This branch is locked by ' + lock[0].id + ' since ' + lock[0].ltime);
-              }
-              else {
-                db.one("insert into worktime(eid,bid,uid,start_time,end_time) values($1,$2,(select uid from users where id=$3),$4,'infinity') returning wtid", [eid, bid, user, values.start])
-                  .then(function (res) {
-                    resolve(res.wtid);
-                  })
-                  .catch(function (err) {
-                    console.log(err.message, err);
-                    reject(err.message);
-                  });
-              }
-            })
-            .catch(function (err) {
-              console.log(err.message, err);
-              reject(err.message);
-            });
-        }
-      })
-      .catch(function (err) {
-        console.log(err.message, err);
-        reject(err.message);
-      });
-  });
-}
-function endWork(wtid, values, user) {
-  return new promise(function (resolve, reject) {
-
-    db.any("select b.name,w.start_time,w.end_time from employees e, worktime w, branches b where e.eid in (select eid from worktime where wtid=$1) and w.wtid<>$2 and e.eid=w.eid and w.bid=b.bid and (w.start_time,w.end_time) overlaps ((select start_time from worktime where wtid=$3),timestamp $4)", [wtid, wtid, wtid, values.end])
-      .then(function (data) {
-        if (data.length) {
-          reject('Overlaps with the same employee\'s worktime at ' + data[0].name + ' branch: started at ' + data[0].start_time + (data[0].end_time !== 'infinty' ? ' to ' + data[0].end_time : ' and still working'));
-        }
-        else {
-          db.any("select u.id,l.ltime from users u, branch_lock l, worktime w where wtid=$1 and w.bid=l.bid and u.uid=l.uid and u.id<>$2 and l.ltime>current_timestamp - interval '18 hours'", [wtid, user.toLowerCase()])
-            .then(function (lock) {
-              if (lock.length) {
-                reject('This branch is locked by ' + lock[0].id + ' since ' + lock[0].ltime);
-              }
-              else {
-                db.one('select extract(hour from $1 - start_time) from worktime where wtid=$2', [values.end, wtid])
-                  .then(function (hour) {
-                    var breaktime = values.nobreaks ? 0 : (hour[0] > 6 ? 30 : 20);
-                    db.query('update worktime set end_time=$1,breaktime=$2 where wtid=$3', [values.end, breaktime, wtid])
-                      .then(function () {
-                        resolve('successfully ended worktime');
-                      })
-                      .catch(function (err) {
-                        console.log(err.message, err);
-                        reject(err.message);
-                      });
-                  })
-                  .catch(function (err) {
-                    console.log(err.message, err);
-                    reject(err.message);
-                  });
-              }
-            })
-            .catch(function (err) {
-              console.log(err.message, err);
-              reject(err.message);
-            });
-        }
       })
       .catch(function (err) {
         console.log(err.message, err);
@@ -605,8 +522,8 @@ function addWork(bid, eid, values, user) {
               }
               else {
                 var diff = moment(values.end).diff(values.start, 'hours');
-                var breaktime = values.nobreaks ? 0 : diff >= 6 ? 30 : (diff >= 4 ? 20 : 0);
-                db.one("insert into worktime(eid,bid,uid,start_time,end_time,breaktime) values($1,$2,(select uid from users where id=$3),$4,$5,$6) returning wtid", [eid, bid, user, values.start, values.end, breaktime])
+                var breaktime = values.nobreak ? 0 : diff >= 6 ? 30 : (diff >= 4 ? 20 : 0);
+                db.one("insert into worktime(eid,bid,uid,start_time,end_time,breaktime,nobreak) values($1,$2,(select uid from users where id=$3),$4,$5,$6,$7) returning wtid", [eid, bid, user, values.start, values.end, breaktime,values.nobreak])
                   .then(function (res) {
                     resolve(res.wtid);
                   })
@@ -648,8 +565,8 @@ function updateWork(wtid, values, user) {
               }
               else {
                 var diff = moment(values.end).diff(values.start, 'hours');
-                var breaktime = values.nobreaks ? 0 : diff >= 6 ? 30 : ( diff >= 4 ? 20 : 0 );
-                db.query('update worktime set start_time = $1,end_time=$2,breaktime=$3 where wtid=$4', [values.start, values.end, breaktime, wtid])
+                var breaktime = values.nobreak ? 0 : diff >= 6 ? 30 : ( diff >= 4 ? 20 : 0 );
+                db.query('update worktime set start_time = $1,end_time=$2,breaktime=$3,nobreak=$4 where wtid=$5', [values.start, values.end, breaktime, values.nobreak, wtid])
                   .then(function () {
                     resolve('successfully ended worktime');
                   })
@@ -696,6 +613,7 @@ function cancelWork(wtid, user) {
       });
   });
 }
+
 function report(bid, eid, values) {
   values.end = moment(values.end).add(1, 'd').format('YYYY-MM-DD');
   return new promise(function (resolve, reject) {
@@ -734,56 +652,6 @@ function report(bid, eid, values) {
   });
 }
 
-function addNoBreak(values, user) {
-  return new promise(function (resolve, reject) {
-    db.any("select u.id,l.ltime from users u, branch_lock l where u.uid=l.uid and u.id<>$1 and l.bid=$2 and l.ltime>current_timestamp - interval '18 hours'", [user.toLowerCase(), values.bid])
-      .then(function (lock) {
-        if (lock.lenth) {
-          reject('This branch is locked by ' + lock[0].id + ' since ' + lock[0].ltime);
-        }
-        else {
-          db.query(pgp.helpers.insert(values, null, 'nobreakdate'))
-            .then(function () {
-              resolve('');
-            })
-            .catch(function (err) {
-              console.log(err.message, err);
-              reject(err.message);
-            });
-        }
-      })
-      .catch(function (err) {
-        console.log(err.message, err);
-        reject(err.message);
-      });
-  })
-}
-
-function delNoBreak(values, user) {
-  return new promise(function (resolve, reject) {
-    db.any("select u.id,l.ltime from users u, branch_lock l where u.uid=l.uid and u.id<>$1 and l.bid=$2 and l.ltime>current_timestamp - interval '18 hours'", [user.toLowerCase(), values.bid])
-      .then(function (lock) {
-        if (lock.lenth) {
-          reject('This branch is locked by ' + lock[0].id + ' since ' + lock[0].ltime);
-        }
-        else {
-          db.query('delete from nobreakdate where bid=${bid} and eid=${eid} and date=${date}', values)
-            .then(function () {
-              resolve('');
-            })
-            .catch(function (err) {
-              console.log(err.message, err);
-              reject(err.message);
-            });
-        }
-      })
-      .catch(function (err) {
-        console.log(err.message, err);
-        reject(err.message);
-      });
-  })
-}
-
 module.exports = {
   getSingleUser: getSingleUser,
   validPassword: validPassword,
@@ -808,12 +676,8 @@ module.exports = {
   unlockBranches: unlockBranches,
   isLocked: isLocked,
   getWorktimes: getWorktimes,
-  startWork: startWork,
-  endWork: endWork,
   cancelWork: cancelWork,
   addWork: addWork,
   updateWork: updateWork,
-  addNoBreak: addNoBreak,
-  delNoBreak: delNoBreak,
   report: report
 };

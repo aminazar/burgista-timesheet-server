@@ -156,9 +156,6 @@ router.get('/api/t/:bid/:date', apiResponse(db.getWorktimes, false, [req=>req.pa
 router.put('/api/t/:bid/:eid', apiResponse(db.addWork, false, [req=>req.params.bid,req=>req.params.eid,req=>req.body,req=>req.user]));
 router.post('/api/t/:wtid', apiResponse(db.updateWork, false, [req=>req.params.wtid,req=>req.body,req=>req.user]));
 router.delete('/api/t/:wtid', apiResponse(db.cancelWork, false, [req=>req.params.wtid,req=>req.user]));
-/* No Break */
-router.put('/api/nobreak', apiResponse(db.addNoBreak, false, [req=>req.body,req=>req.user]));
-router.delete('/api/nobreak/:date/:bid/:eid', apiResponse(db.delNoBreak, false, [req=>req.params,req=>req.user]));
 /* Report */
 router.get('/api/report/:bid/:eid', apiResponse(db.report,false,[req=>req.params.bid, req=>req.params.eid,req=>req.query]));
 /* Diverting unknown routes to Angular router */
