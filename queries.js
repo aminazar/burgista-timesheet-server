@@ -580,7 +580,7 @@ function updateWork(wtid, values, user) {
               else {
                 var diff = moment(values.end).diff(values.start, 'hours');
                 var breaktime = values.nobreak ? 0 : diff >= 6 ? 30 : ( diff >= 4 ? 20 : 0 );
-                db.query('update worktime set start_time = $1,end_time=$2,breaktime=$3,nobreak=$4 where wtid=$5', [values.start, values.end, breaktime, values.nobreak, wtid])
+                db.query('update worktime set start_time = $1,end_time=$2,breaktime=$3,nobreak=$4,uid=(select uid from users where id=$5) where wtid=$6', [values.start, values.end, breaktime, values.nobreak, user, wtid])
                   .then(function () {
                     resolve('successfully ended worktime');
                   })
