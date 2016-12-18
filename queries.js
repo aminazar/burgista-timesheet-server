@@ -500,17 +500,14 @@ function isLocked(bid, user) {
   })
 }
 
-function getWorktimes(bid, date) {
+function getWorktimes(bid, today) {
   return new promise(function (resolve, reject) {
     var results = {};
-    var today = date;
-    var tomorrow = moment.utc(date).add(1, 'd').format('YYYY-MM-DD');
 
     db.any("select e.eid, e.firstname, e.surname, w.wtid, u.id as updated_by, start_time, end_time, breaktime,nobreak " +
       "from employees e " +
-      "left outer join worktime w on w.eid=e.eid and w.bid=${bid} and w.start_time >= timestamp ${today} and w.start_time < timestamp ${tomorrow} " +
-      "left outer join users u on w.uid=u.uid " +
-      "where e.contract_date <= ${today} and e.contract_end > ${today}", {today: today, tomorrow: tomorrow, bid: bid})
+      "left outer join worktime w on w.eid=e.eid and w.bid=${bid} and w.start_time::date = ${today} " +
+      "left outer join users u on w.uid=u.uid", {today: today, bid: bid})
       .then(function (data) {
         resolve(data);
       })
@@ -536,7 +533,7 @@ function addWork(bid, eid, values, user) {
               }
               else {
                 var diff = moment(values.end).diff(values.start, 'hours');
-                var breaktime = values.nobreak ? 0 : diff >= 6 ? 30 : (diff >= 4 ? 20 : 0);
+                var breaktime = values.nobreak ? 0 : diff > 7 ? 40 : (diff > 3 ? 20 : 0);
                 db.one("insert into worktime(eid,bid,uid,start_time,end_time,breaktime,nobreak) values($1,$2,(select uid from users where id=$3),$4,$5,$6,$7) returning wtid", [eid, bid, user, values.start, values.end, breaktime,values.nobreak])
                   .then(function (res) {
                     resolve(res.wtid);
