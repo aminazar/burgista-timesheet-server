@@ -642,7 +642,17 @@ function report(bid, eid, values) {
           })
       }
       else {
-
+        db.any( "select to_char(start_time,'DD-Mon-YY') as sdate,branches.name as branch, start_time::time, end_time::time, breaktime, extract(hour from end_time-start_time) as hours, extract(minute from end_time-start_time) as mins, nobreak " +
+                "from worktime " +
+                "join branches on worktime.bid=branches.bid " +
+                "where eid=${eid} and start_time::date >= ${start} and start_time::date < ${end} order by start_time desc",{eid:eid, start:values.start, end:values.end})
+          .then(function(data){
+            resolve(data);
+          })
+          .catch(function(err){
+            console.log(err.message,err);
+            reject(err.message);
+          });
       }
     }
     else if (eid === 'ALL') {
@@ -657,8 +667,17 @@ function report(bid, eid, values) {
           reject(err.message);
         })
     }
-    else {
-
+    else{
+      db.any( "select to_char(start_time,'DD-Mon-YY') as sdate, start_time::time, end_time::time, breaktime, extract(hour from end_time-start_time) as hours, extract(minute from end_time-start_time) as mins, nobreak " +
+              "from worktime " +
+              "where eid=${eid} and bid=${bid} and start_time::date >= ${start} and start_time::date < ${end} order by start_time desc",{eid:eid, bid:bid, start:values.start, end:values.end})
+        .then(function(data){
+          resolve(data);
+        })
+        .catch(function(err){
+          console.log(err.message,err);
+          reject(err.message);
+        })
     }
   });
 }
