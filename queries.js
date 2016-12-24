@@ -414,7 +414,7 @@ function updateEmployee(eid, values) {
                       db.tx(function (t2) {
                         return t2.result("update employees set contract_end=current_date-1 where eid=$1", [eid])
                           .then(function () {
-                            values.contract_date = moment().utc().format('YYYY-MM-DD');
+                            values.contract_date = moment().format('YYYY-MM-DD');
                             return t2.query(pgp.helpers.insert(values, null, 'employees') + ' returning eid');
                           });
                       })
@@ -631,7 +631,7 @@ function report(bid, eid, values) {
     if (bid === 'ALL') {
       if (eid === 'ALL') {
         db.any('select e.eid,firstname,surname,rate,hours,mins,breaks from employees e,' +
-          "(select eid,sum(extract(minute from end_time-start_time)) as mins, sum(extract(hour from end_time-start_time)) as hours, sum(breaktime) as breaks " +
+          "(select eid,extract(minute from sum(end_time-start_time)) as mins, extract(hour from sum(end_time-start_time)) as hours, sum(breaktime) as breaks " +
           "from worktime where end_time<'infinity' and start_time >= $1 and start_time < $2 group by eid) s where e.eid=s.eid order by firstname,surname", [values.start, values.end])
           .then(function (data) {
             resolve(data)
@@ -645,7 +645,7 @@ function report(bid, eid, values) {
         db.any( "select to_char(start_time,'DD-Mon-YY') as sdate,branches.name as branch, start_time::time, end_time::time, breaktime, extract(hour from end_time-start_time) as hours, extract(minute from end_time-start_time) as mins, nobreak " +
                 "from worktime " +
                 "join branches on worktime.bid=branches.bid " +
-                "where eid=${eid} and start_time::date >= ${start} and start_time::date < ${end} order by start_time desc",{eid:eid, start:values.start, end:values.end})
+                "where eid=${eid} and start_time::date >= ${start} and start_time::date < ${end} order by start_time::timestamp",{eid:eid, start:values.start, end:values.end})
           .then(function(data){
             resolve(data);
           })
@@ -670,7 +670,7 @@ function report(bid, eid, values) {
     else{
       db.any( "select to_char(start_time,'DD-Mon-YY') as sdate, start_time::time, end_time::time, breaktime, extract(hour from end_time-start_time) as hours, extract(minute from end_time-start_time) as mins, nobreak " +
               "from worktime " +
-              "where eid=${eid} and bid=${bid} and start_time::date >= ${start} and start_time::date < ${end} order by start_time desc",{eid:eid, bid:bid, start:values.start, end:values.end})
+              "where eid=${eid} and bid=${bid} and start_time::date >= ${start} and start_time::date < ${end} order by start_time::timestamp",{eid:eid, bid:bid, start:values.start, end:values.end})
         .then(function(data){
           resolve(data);
         })
