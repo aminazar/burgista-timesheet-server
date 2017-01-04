@@ -642,10 +642,12 @@ function report(bid, eid, values) {
           })
       }
       else {
-        db.any( "select to_char(start_time,'DD-Mon-YY') as sdate,branches.name as branch, start_time::time, end_time::time, breaktime, extract(hour from end_time-start_time) as hours, extract(minute from end_time-start_time) as mins, nobreak " +
+        db.any( "select to_char(start_time,'DD-Mon-YY') as sdate,branches.name as branch, start_time::time, end_time::time, breaktime, extract(hour from end_time-start_time) as hours, extract(minute from end_time-start_time) as mins, nobreak,rate " +
                 "from worktime " +
                 "join branches on worktime.bid=branches.bid " +
-                "where eid=${eid} and start_time::date >= ${start} and start_time::date < ${end} order by start_time::timestamp",{eid:eid, start:values.start, end:values.end})
+                "join employees on worktime.eid=employees.eid " +
+                "where worktime.eid in (select e.eid from employees e join (select * from employees where eid=${eid}) s on lower(s.firstname)=lower(e.firstname) and lower(s.surname)=lower(e.surname)) " +
+                "and start_time::date >= ${start} and start_time::date < ${end} order by start_time::timestamp",{eid:eid, start:values.start, end:values.end})
           .then(function(data){
             resolve(data);
           })
