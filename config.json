@@ -1,0 +1,9 @@
+{
+  "development": {
+    "pgConnection": "postgres://localhost:5432/burgistatimesheet"
+  },
+  "production": {
+  "pgConnection": "postgres://viiclupuwhtcem:fB3CGqRDPfEtTo8yuaNpFVxqix@ec2-54-75-230-132.eu-west-1.compute.amazonaws.com:5432/ddlsobapod2q8v"
+
+  }
+}

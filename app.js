@@ -19,10 +19,12 @@ var LocalStrategy = require('passport-local');
 var expressSession = require('express-session');
 
 app.use(expressSession({
-    genid: function(req) {
+  saveUninitialized: false,
+  resave: true,
+  genid: function(req) {
     return genuuid.v4() // use UUIDs for session IDs
-    },
-    secret: 'KhedMan'}));
+  },
+  secret: 'KhedMan'}));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash()); // use connect-flash for flash messages stored in session
