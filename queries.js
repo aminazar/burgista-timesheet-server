@@ -276,7 +276,7 @@ function deleteUser(uid) {
 }
 function listEmployees() {
   return new promise(function (resolve, reject) {
-    db.any('select eid,firstname,surname,rate,role,contract_date,contract_end,id as username from employees left outer join users on users.uid=employees.uid order by contract_end desc,firstname asc,surname asc')
+    db.any('select eid,firstname,surname,email,rate,role,contract_date,contract_end,id as username from employees left outer join users on users.uid=employees.uid order by contract_end desc,firstname asc,surname asc')
       .then(function (res) {
         resolve(res)
       })
@@ -686,6 +686,40 @@ function report(bid, eid, values) {
     }
   });
 }
+function reportMailer(email,table) {
+    // create reusable transporter object using the default SMTP transport
+    var transporter = nodemailer.createTransport('smtps://burgistats%40gmail.com:Am1rM0nfar3d@smtp.gmail.com');
+    var columns = ['']
+    var html='';
+    table.forEach(function(row,i){
+        if(i!==table.length - 1){
+            html+='<tr><td>'+i+'</td><td>'++'</td></tr>'
+        }
+    });
+    // setup e-mail data with unicode symbols
+    var mailOptions = {
+        from: '"Burgista Timesheet App" <no-reply@burgistats.com>', // sender address
+        to: [email], // list of receivers
+        subject: 'Your timesheet report', // Subject line
+        html: '<p>Reset '+(user===email?'your':user +"'s")+' password through <a href="' + link + '">this link</a>.</p>' // html body
+    };
+
+    // send mail with defined transport object
+    return new promise(function (resolve, reject) {
+        transporter.sendMail(mailOptions, function (error, info) {
+            if (error)
+                reject(error);
+            else
+                resolve(info.response);
+        });
+    });
+}
+
+function emailReport(eid,table,from,to){
+    return new promise(function (resolve, reject) {
+        
+    });
+}
 
 module.exports = {
   getSingleUser: getSingleUser,
@@ -715,5 +749,6 @@ module.exports = {
   cancelWork: cancelWork,
   addWork: addWork,
   updateWork: updateWork,
-  report: report
+  report: report,
+  emailReport: emailReport
 };
