@@ -691,22 +691,49 @@ function report(bid, eid, values) {
     }
   });
 }
-function reportMailer(email,table) {
+function reportMailer(email,table,from,to) {
     // create reusable transporter object using the default SMTP transport
     var transporter = nodemailer.createTransport('smtps://burgistats%40gmail.com:Am1rM0nfar3d@smtp.gmail.com');
-    var columns = ['']
-    var html='';
+    var columns = [
+      "Date",
+      "Branch",
+      "Start Time",
+      "End Time",
+      "Rate",
+      "Worked",
+      "Break",
+      "Paying Time",
+      "Wage"
+    ];
+    var html='<!doctype html><html><head><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"></head><body>';
     table.forEach(function(row,i){
         if(i!==table.length - 1){
-            html+='<tr><td>'+i+'</td><td>'++'</td></tr>'
+            if(!i){
+              html+='<th>#</th>';
+              columns.forEach(colName=>html+=`<th style="background:#fafafa">${colName}</th>`);
+            }
+            html+=`<tr><td style="background:${i%2?'#ffffff':'#fafafa'}">${i}</td>`;
+            columns.forEach(colName=>{
+              html+=`<td>${row[colName]}</td>`;
+            });
+            html+='</tr>'
+        }
+        else{
+          html+=`<tr class="sumrow">
+                <td colspan="4" style="text-align:right">Sum</td>
+                <td>${row.Worked}</td>
+                <td>${row.Break}</td>
+                <td>${row["Paying Time"]}</td>
+                <td>${row.Wage}</td>
+              </tr>`;
         }
     });
     // setup e-mail data with unicode symbols
     var mailOptions = {
         from: '"Burgista Timesheet App" <no-reply@burgistats.com>', // sender address
         to: [email], // list of receivers
-        subject: 'Your timesheet report', // Subject line
-        html: '<p>Reset '+(user===email?'your':user +"'s")+' password through <a href="' + link + '">this link</a>.</p>' // html body
+        subject: `Your Burgista Timesheet Report: ${from} To ${to}`, // Subject line
+        html: `<p>Dear ${name}</p><p>Here is your timesheet during period starting on ${from} and ending on ${to}, according to our records.</p><p>Please contact your manager if you see any discrepancy in it</p><br><table class="table">${table}</table></body></html>`
     };
 
     // send mail with defined transport object
@@ -722,7 +749,19 @@ function reportMailer(email,table) {
 
 function emailReport(eid,table,from,to){
     return new promise(function (resolve, reject) {
-        
+        db.one("select email,firstname, surname from employees where eid=${eid}",{eid:eid})
+          .then(data=>{
+            if(data.email){
+              reportMailer(email,table,from,to).then(resolve).catch(reject);
+            }
+            else{
+              reject(`No email is found for ${data.firstname} ${data.surname} - add an email address in 'Employees' page.`);
+            }
+          })
+          .catch(err=>{
+            console.log(err.message,err);
+            reject(err.message);
+          });
     });
 }
 
