@@ -520,7 +520,7 @@ function getWorktimes(bid, today) {
 }
 
 var breakTimeFormula = function (diff, nobreak) {
-  var breaktime = nobreak ? 0 : diff > 7 ? 40 : (diff > 3 ? 20 : 0);
+  var breaktime = nobreak ? 0 : diff >= 7 ? 40 : (diff >= 3 ? 20 : 0);
   return breaktime;
 };
 function addWork(bid, eid, values, user) {
