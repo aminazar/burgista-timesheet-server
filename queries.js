@@ -507,7 +507,8 @@ function getWorktimes(bid, today) {
     db.any("select e.eid, e.firstname, e.surname, w.wtid, u.id as updated_by, start_time, end_time, breaktime,nobreak " +
       "from employees e " +
       "left outer join worktime w on w.eid=e.eid and w.bid=${bid} and w.start_time::date = ${today} " +
-      "left outer join users u on w.uid=u.uid", {today: today, bid: bid})
+      "left outer join users u on w.uid=u.uid " +
+      "where e.contract_date <= ${today} and e.contract_end >= ${today}", {today: today, bid: bid})
       .then(function (data) {
         resolve(data);
       })
@@ -518,6 +519,10 @@ function getWorktimes(bid, today) {
   });
 }
 
+var breakTimeFormula = function (diff, nobreak) {
+  var breaktime = nobreak ? 0 : diff > 7 ? 40 : (diff > 3 ? 20 : 0);
+  return breaktime;
+};
 function addWork(bid, eid, values, user) {
   return new promise(function (resolve, reject) {
     db.any("select b.name,w.start_time,w.end_time from employees e, worktime w, branches b where e.eid=w.eid and w.bid=b.bid and e.eid=$1 and (w.start_time,w.end_time) overlaps ($2,$3)", [eid, values.start, values.end])
@@ -533,7 +538,7 @@ function addWork(bid, eid, values, user) {
               }
               else {
                 var diff = moment(values.end).diff(values.start, 'hours');
-                var breaktime = values.nobreak ? 0 : diff > 7 ? 40 : (diff > 3 ? 20 : 0);
+                var breaktime = breakTimeFormula(diff,values.nobreak);
                 db.one("insert into worktime(eid,bid,uid,start_time,end_time,breaktime,nobreak) values($1,$2,(select uid from users where id=$3),$4,$5,$6,$7) returning wtid", [eid, bid, user, values.start, values.end, breaktime,values.nobreak])
                   .then(function (res) {
                     resolve(res.wtid);
@@ -576,7 +581,7 @@ function updateWork(wtid, values, user) {
               }
               else {
                 var diff = moment(values.end).diff(values.start, 'hours');
-                var breaktime = values.nobreak ? 0 : diff >= 6 ? 30 : ( diff >= 4 ? 20 : 0 );
+                var breaktime = breakTimeFormula(diff,values.nobreak);
                 db.query('update worktime set start_time = $1,end_time=$2,breaktime=$3,nobreak=$4,uid=(select uid from users where id=$5) where wtid=$6', [values.start, values.end, breaktime, values.nobreak, user, wtid])
                   .then(function () {
                     resolve('successfully ended worktime');
