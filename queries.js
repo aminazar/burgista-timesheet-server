@@ -11,6 +11,7 @@ var connectionString = config.pgConnection;
 var db = pgp(connectionString);
 var mailer = require('./pwdresetmailer');
 var moment = require('moment');
+var nodemailer = require('nodemailer');
 
 function getSingleUser(id, col) {
   return ( new promise(function (onSuccess, onError) {
@@ -374,6 +375,7 @@ function deleteEmployee(eid) {
 }
 
 function updateEmployee(eid, values) {
+  delete values.username;//it is needed for adding 'manager' employees but it is not needed in updates
   return new promise(function (resolve, reject) {
     var lvalues = {};//lvaluse conains lowercase values of name, in order to check if an employee with a same name has contract overlap
     for (k in values) {
@@ -635,7 +637,7 @@ function report(bid, eid, values) {
   return new promise(function (resolve, reject) {
     if (bid === 'ALL') {
       if (eid === 'ALL') {
-        db.any('select e.eid,firstname,surname,rate,hours,mins,breaks from employees e,' +
+        db.any('select e.eid,firstname,surname,email,rate,hours,mins,breaks from employees e,' +
           "(select eid,extract(minute from sum(end_time-start_time)) as mins, extract(hour from sum(end_time-start_time)) as hours, sum(breaktime) as breaks " +
           "from worktime where end_time<'infinity' and start_time >= $1 and start_time < $2 group by eid) s where e.eid=s.eid order by firstname,surname", [values.start, values.end])
           .then(function (data) {
@@ -663,7 +665,7 @@ function report(bid, eid, values) {
       }
     }
     else if (eid === 'ALL') {
-      db.any('select e.eid,firstname,surname,rate,hours,mins,breaks from employees e,' +
+      db.any('select e.eid,firstname,surname,email,rate,hours,mins,breaks from employees e,' +
         "(select eid,bid,sum(extract(minute from end_time-start_time)) as mins, sum(extract(hour from end_time-start_time)) as hours, sum(breaktime) as breaks " +
         "from worktime where end_time<'infinity' and start_time >= $2 and start_time < $3 group by eid,bid) s where s.bid=$1 and e.eid=s.eid order by firstname,surname", [bid, values.start, values.end])
         .then(function (data) {
@@ -691,10 +693,11 @@ function report(bid, eid, values) {
     }
   });
 }
-function reportMailer(email,table,from,to) {
+function reportMailer(email,table,fromDate,toDate,name) {
     // create reusable transporter object using the default SMTP transport
     var transporter = nodemailer.createTransport('smtps://burgistats%40gmail.com:Am1rM0nfar3d@smtp.gmail.com');
     var columns = [
+      "#",
       "Date",
       "Branch",
       "Start Time",
@@ -705,35 +708,39 @@ function reportMailer(email,table,from,to) {
       "Paying Time",
       "Wage"
     ];
-    var html='<!doctype html><html><head><link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"></head><body>';
-    table.forEach(function(row,i){
+    var html=``;
+    table.forEach((row,i)=>{
         if(i!==table.length - 1){
             if(!i){
-              html+='<th>#</th>';
-              columns.forEach(colName=>html+=`<th style="background:#fafafa">${colName}</th>`);
+              html+='<tr class="darkrow">';
+              columns.forEach((colName,j)=>html+=`<th style="padding:10px"${j%2?' class="darkcol"':''}>${colName}</th>`);
+              html+='</tr>'
             }
-            html+=`<tr><td style="background:${i%2?'#ffffff':'#fafafa'}">${i}</td>`;
-            columns.forEach(colName=>{
-              html+=`<td>${row[colName]}</td>`;
+            html+=`<tr${i%2?' class="darkrow"':''}>`;
+            columns.forEach((colName,j)=>{
+              html+=`<td style="padding:10px"${j%2?' class="darkcol"':''}>${row[colName]}</td>`;
             });
             html+='</tr>'
         }
         else{
-          html+=`<tr class="sumrow">
-                <td colspan="4" style="text-align:right">Sum</td>
+          html+=`<tr style="font-weight: bold;background: rgba(255,255,150,.5)">
+                <td colspan="6" style="text-align:right">Sum</td>
                 <td>${row.Worked}</td>
-                <td>${row.Break}</td>
+                <td class="darkcol">${row.Break}</td>
                 <td>${row["Paying Time"]}</td>
-                <td>${row.Wage}</td>
+                <td class="darkcol">${row.Wage}</td>
               </tr>`;
         }
     });
     // setup e-mail data with unicode symbols
+    fromDate = moment(fromDate).format('D MMM YY');
+    toDate   = moment(toDate).format('D MMM YY');
     var mailOptions = {
         from: '"Burgista Timesheet App" <no-reply@burgistats.com>', // sender address
         to: [email], // list of receivers
-        subject: `Your Burgista Timesheet Report: ${from} To ${to}`, // Subject line
-        html: `<p>Dear ${name}</p><p>Here is your timesheet during period starting on ${from} and ending on ${to}, according to our records.</p><p>Please contact your manager if you see any discrepancy in it</p><br><table class="table">${table}</table></body></html>`
+        cc: [config.ccEmail],
+        subject: `Your Burgista Timesheet Report: ${fromDate} To ${toDate}`, // Subject line
+        html: `<!doctype html><html><head><style>th{padding:0 3px} .darkrow{background:rgba(128,128,128,.5)} .darkcol{background:rgba(220,220,255,.2)} p{font-size:125%} table{margin-left:100px}</style><body><p>Dear ${name},</p><p>Here is your timesheet during period starting from ${fromDate} to ${toDate}, according to our records.</p><p>Please contact your manager if you see any discrepancy in this report.</p><br><table>${html}</table><p>Regards,<br>Burgista Management</p></body></html>`
     };
 
     // send mail with defined transport object
@@ -747,12 +754,12 @@ function reportMailer(email,table,from,to) {
     });
 }
 
-function emailReport(eid,table,from,to){
+function emailReport(eid,table,fromDate,toDate){
     return new promise(function (resolve, reject) {
         db.one("select email,firstname, surname from employees where eid=${eid}",{eid:eid})
           .then(data=>{
             if(data.email){
-              reportMailer(email,table,from,to).then(resolve).catch(reject);
+              reportMailer(data.email,table,fromDate,toDate,`${data.firstname} ${data.surname}`).then(resolve).catch(reject);
             }
             else{
               reject(`No email is found for ${data.firstname} ${data.surname} - add an email address in 'Employees' page.`);

@@ -158,7 +158,7 @@ router.post('/api/t/:wtid', apiResponse(db.updateWork, false, [req=>req.params.w
 router.delete('/api/t/:wtid', apiResponse(db.cancelWork, false, [req=>req.params.wtid,req=>req.user]));
 /* Report */
 router.get('/api/report/:bid/:eid', apiResponse(db.report,false,[req=>req.params.bid, req=>req.params.eid,req=>req.query]));
-router.post('/api/report/:eid/:from/:to',apiResponse(db.emailReport,false,[req=>req.params.eid,req=>req.body,req=>req.params.from,req=>req.params.to]));
+router.post('/api/report/:fromDate/:toDate/:eid',apiResponse(db.emailReport,false,[req=>req.params.eid,req=>req.body,req=>req.params.fromDate,req=>req.params.toDate]));
 /* Diverting unknown routes to Angular router */
 router.all("*",function(req,res){
     console.log('[TRACE] Server 404 request: '+req.originalUrl);
