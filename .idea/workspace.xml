@@ -106,8 +106,8 @@
       <file leaf-file-name="config.json" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/config.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="10" column="35" lean-forward="false" selection-start-line="10" selection-start-column="35" selection-end-line="10" selection-end-column="35" />
+            <state relative-caret-position="195">
+              <caret line="13" column="35" lean-forward="false" selection-start-line="13" selection-start-column="35" selection-end-line="13" selection-end-column="35" />
               <folding />
             </state>
           </provider>
@@ -378,7 +378,7 @@
       <workItem from="1484142193126" duration="6704000" />
       <workItem from="1484160678851" duration="391000" />
       <workItem from="1484161132442" duration="1109000" />
-      <workItem from="1484163111106" duration="12979000" />
+      <workItem from="1484163111106" duration="13125000" />
     </task>
     <task id="LOCAL-00001" summary="adding emailing report feature - 1st installment">
       <created>1483653596947</created>
@@ -422,11 +422,18 @@
       <option name="project" value="LOCAL" />
       <updated>1484386468230</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Adding mailgun email in production">
+      <created>1484387336761</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1484387336761</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="111362000" />
+    <option name="totallyTimeSpent" value="111508000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -838,8 +845,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/config.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="35" lean-forward="false" selection-start-line="10" selection-start-column="35" selection-end-line="10" selection-end-column="35" />
+        <state relative-caret-position="195">
+          <caret line="13" column="35" lean-forward="false" selection-start-line="13" selection-start-column="35" selection-end-line="13" selection-end-column="35" />
           <folding />
         </state>
       </provider>
