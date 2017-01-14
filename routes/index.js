@@ -3,8 +3,6 @@ var router = express.Router();
 var path = require('path')
 var passport = require('passport');
 var db = require('../queries');
-var mailer = require('../pwdresetmailer');
-
 
 router.post('/login', function(req, res, next) {
     if(req.body.forget){ //Send a 'reset password' link through email
@@ -54,7 +52,7 @@ router.get('/reset/:id', function(req,res, next){
 });
 
 router.post('/reset/:id', function(req, res, next){
-    console.log(req.params,req.body)
+    console.log(req.params,req.body);
     db.getResetPassword(req.params.id)
         .then(function(data){
             if(req.body.password===req.body.repeat) {

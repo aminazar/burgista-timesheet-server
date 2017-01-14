@@ -9,9 +9,9 @@ var app = require('express')();
 var config = require('./config.json')[app.get('env')];
 var connectionString = config.pgConnection;
 var db = pgp(connectionString);
-var mailer = require('./pwdresetmailer');
 var moment = require('moment');
 var nodemailer = require('nodemailer');
+var transporter = nodemailer.createTransport(`smtps://${config.emailAddress}:${config.emailPwd}@${config.emailDomain}`);
 
 function getSingleUser(id, col) {
   return ( new promise(function (onSuccess, onError) {
@@ -217,7 +217,7 @@ function mailResetPassword(uid, values, link) {
         if(email.indexOf('@')===-1)
           resolve(link);
         else {
-          mailer(email, link, user)
+          pwdMailer(email, link, user)
             .then(function () {
               resolve(uid)
             })
@@ -694,8 +694,6 @@ function report(bid, eid, values) {
   });
 }
 function reportMailer(email,table,fromDate,toDate,name) {
-    // create reusable transporter object using the default SMTP transport
-    var transporter = nodemailer.createTransport('smtps://burgistats%40gmail.com:Am1rM0nfar3d@smtp.gmail.com');
     var columns = [
       "#",
       "Date",
@@ -753,7 +751,24 @@ function reportMailer(email,table,fromDate,toDate,name) {
         });
     });
 }
+function pwdMailer(email,link,user) {
+  var mailOptions = {
+    from: '"Burgista Timesheet App" <no-reply@burgistats.com>', // sender address
+    to: email, // list of receivers
+    subject: 'Reset your password in Burgista timesheet app', // Subject line
+    text: 'Reset your password through this link: ' + link, // plaintext body
+    html: '<p>Reset '+(user===email?'your':user +"'s")+' password through <a href="' + link + '">this link</a>.</p>' // html body
+  };
 
+  return new promise(function (resolve, reject) {
+    transporter.sendMail(mailOptions, function (error, info) {
+      if (error)
+        reject(error);
+      else
+        resolve(info.response);
+    });
+  });
+}
 function emailReport(eid,table,fromDate,toDate){
     return new promise(function (resolve, reject) {
         db.one("select email,firstname, surname from employees where eid=${eid}",{eid:eid})
