@@ -8,7 +8,7 @@
   },
   "production": {
     "pgConnection": "postgres://viiclupuwhtcem:fB3CGqRDPfEtTo8yuaNpFVxqix@ec2-54-75-230-132.eu-west-1.compute.amazonaws.com:5432/ddlsobapod2q8v",
-    "ccEmail":"finance@burgista.co.uk",
+    "ccEmail":"sma.azar@gmail.com",
     "emailAddress": "postmaster%40app346d957a26e341b9aef6395f304dbd56.mailgun.org",
     "emailPwd": "265cc5555da8110321d452d88e90680e",
     "emailDomain": "smtp.mailgun.org"

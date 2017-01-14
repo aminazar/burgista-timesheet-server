@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="01756e81-ac51-4fee-b94e-d955943a2f48" name="Default" comment="Adding mailgun email in production">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/pwdresetmailer.js" afterPath="" />
+    <list default="true" id="01756e81-ac51-4fee-b94e-d955943a2f48" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/config.json" afterPath="$PROJECT_DIR$/config.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/queries.js" afterPath="$PROJECT_DIR$/queries.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/index.js" afterPath="$PROJECT_DIR$/routes/index.js" />
     </list>
     <ignored path="BergistaServer.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -40,7 +37,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="queries.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="queries.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/queries.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="-270">
@@ -106,11 +103,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="config.json" pinned="false" current-in-tab="false">
+      <file leaf-file-name="config.json" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/config.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="11" column="34" lean-forward="false" selection-start-line="11" selection-start-column="34" selection-end-line="11" selection-end-column="34" />
+            <state relative-caret-position="150">
+              <caret line="10" column="35" lean-forward="false" selection-start-line="10" selection-start-column="35" selection-end-line="10" selection-end-column="35" />
               <folding />
             </state>
           </provider>
@@ -177,10 +174,10 @@
         <option value="$PROJECT_DIR$/public/index.html" />
         <option value="$PROJECT_DIR$/app.js" />
         <option value="$PROJECT_DIR$/.gitignore" />
-        <option value="$PROJECT_DIR$/config.json" />
         <option value="$PROJECT_DIR$/pwdresetmailer.js" />
         <option value="$PROJECT_DIR$/queries.js" />
         <option value="$PROJECT_DIR$/routes/index.js" />
+        <option value="$PROJECT_DIR$/config.json" />
       </list>
     </option>
   </component>
@@ -381,7 +378,7 @@
       <workItem from="1484142193126" duration="6704000" />
       <workItem from="1484160678851" duration="391000" />
       <workItem from="1484161132442" duration="1109000" />
-      <workItem from="1484163111106" duration="12785000" />
+      <workItem from="1484163111106" duration="12979000" />
     </task>
     <task id="LOCAL-00001" summary="adding emailing report feature - 1st installment">
       <created>1483653596947</created>
@@ -418,11 +415,18 @@
       <option name="project" value="LOCAL" />
       <updated>1484219267992</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Adding mailgun email in production">
+      <created>1484386468230</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1484386468230</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="111168000" />
+    <option name="totallyTimeSpent" value="111362000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -443,7 +447,7 @@
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32919708" sideWeight="0.4986215" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32931727" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1572327" sideWeight="0.50664455" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.34014598" sideWeight="0.4631745" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.34014598" sideWeight="0.4631745" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24970461" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33868614" sideWeight="0.4541158" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.1572327" sideWeight="0.50664455" order="3" side_tool="true" content_ui="tabs" />
@@ -478,7 +482,8 @@
     <MESSAGE value="fixing breaktime formula" />
     <MESSAGE value="Finishing 'email report' functionality" />
     <MESSAGE value="Correcting holiday entitlement formula" />
-    <option name="LAST_COMMIT_MESSAGE" value="Correcting holiday entitlement formula" />
+    <MESSAGE value="Adding mailgun email in production" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adding mailgun email in production" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -797,14 +802,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/config.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="11" column="34" lean-forward="false" selection-start-line="11" selection-start-column="34" selection-end-line="11" selection-end-column="34" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/pwdresetmailer.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
@@ -836,6 +833,14 @@
             <marker date="1484386313000" expanded="true" signature="28251:28267" ph="..." />
             <marker date="1484386313000" expanded="true" signature="29163:30720" ph="..." />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="10" column="35" lean-forward="false" selection-start-line="10" selection-start-column="35" selection-end-line="10" selection-end-column="35" />
+          <folding />
         </state>
       </provider>
     </entry>
