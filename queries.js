@@ -711,12 +711,12 @@ function reportMailer(email,table,fromDate,toDate,name) {
         if(i!==table.length - 1){
             if(!i){
               html+='<tr class="darkrow">';
-              columns.forEach((colName,j)=>html+=`<th style="padding:10px"${j%2?' class="darkcol"':''}>${colName}</th>`);
+              columns.forEach((colName,j)=>html+=`<th${j%2?' class="darkcol"':''}>${colName}</th>`);
               html+='</tr>'
             }
             html+=`<tr${i%2?' class="darkrow"':''}>`;
             columns.forEach((colName,j)=>{
-              html+=`<td style="padding:10px"${j%2?' class="darkcol"':''}>${row[colName]}</td>`;
+              html+=`<td${j%2?' class="darkcol"':''}>${row[colName]}</td>`;
             });
             html+='</tr>'
         }
@@ -734,11 +734,11 @@ function reportMailer(email,table,fromDate,toDate,name) {
     fromDate = moment(fromDate).format('D MMM YY');
     toDate   = moment(toDate).format('D MMM YY');
     var mailOptions = {
-        from: '"Burgista Timesheet App" <no-reply@burgistats.com>', // sender address
+        from: config.sender, // sender address
         to: [email], // list of receivers
         cc: [config.ccEmail],
         subject: `Your Burgista Timesheet Report: ${fromDate} To ${toDate}`, // Subject line
-        html: `<!doctype html><html><head><style>th{padding:0 3px} .darkrow{background:rgba(128,128,128,.5)} .darkcol{background:rgba(220,220,255,.2)} p{font-size:125%} table{margin-left:100px}</style><body><p>Dear ${name},</p><p>Here is your timesheet during period starting from ${fromDate} to ${toDate}, according to our records.</p><p>Please contact your manager if you see any discrepancy in this report.</p><br><table>${html}</table><p>Regards,<br>Burgista Management</p></body></html>`
+        html: `<!doctype html><html><head><style>th{padding:0 3px;border-bottom:solid 2px black; white-space: nowrap;padding:10px;} td{white-space: nowrap;padding:10px;} .darkrow{background:rgba(128,128,128,.5)} .darkcol{background:rgba(220,220,255,.2)} p{font-size:125%} table{width:100%}</style><body><p>Dear ${name},</p><p>Here is your timesheet during period starting from ${fromDate} to ${toDate}, according to our records.</p><p>Please contact your manager if you see any discrepancy in this report.</p><br><table>${html}</table><p>Regards,<br>Burgista Management</p></body></html>`
     };
 
     // send mail with defined transport object
@@ -753,7 +753,7 @@ function reportMailer(email,table,fromDate,toDate,name) {
 }
 function pwdMailer(email,link,user) {
   var mailOptions = {
-    from: '"Burgista Timesheet App" <no-reply@burgistats.com>', // sender address
+    from: config.sender, // sender address
     to: email, // list of receivers
     subject: 'Reset your password in Burgista timesheet app', // Subject line
     text: 'Reset your password through this link: ' + link, // plaintext body

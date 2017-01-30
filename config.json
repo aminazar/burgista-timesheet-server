@@ -1,6 +1,7 @@
 {
   "development": {
     "pgConnection": "postgres://postgres@localhost:5432/burgistatimesheet",
+    "sender": "\"Burgista Timesheet App\" <burgistats@gmail.com>",
     "ccEmail":"sma.azar@gmail.com",
     "emailAddress":"burgistats%40gmail.com",
     "emailPwd":"Am1rM0nfar3d",
@@ -8,9 +9,10 @@
   },
   "production": {
     "pgConnection": "postgres://viiclupuwhtcem:fB3CGqRDPfEtTo8yuaNpFVxqix@ec2-54-75-230-132.eu-west-1.compute.amazonaws.com:5432/ddlsobapod2q8v",
+    "sender": "\"Burgista Timesheet App\" <timesheet@burgista.co.uk>",
     "ccEmail":"finance@burgista.co.uk",
-    "emailAddress":"burgistats%40gmail.com",
-    "emailPwd":"Am1rM0nfar3d",
-    "emailDomain": "smtp.gmail.com"
+    "emailAddress":"timesheet%40burgista.co.uk",
+    "emailPwd":"Burgista1!",
+    "emailDomain": "smtp.123-reg.co.uk"
   }
 }
