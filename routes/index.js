@@ -10,13 +10,13 @@ router.post('/login', function(req, res, next) {
         db.getSingleUser(req.body.username)
             .then(function(data) {
                 userdata = data;
-                return ( db.insertResetPassword(data.uid))
+                return (data)
             })
-            .then(function(hash){
+            .then(function(data){
                 //TODO: update admin email
-                var email = userdata.id.toLowerCase() === 'admin' ? ((express().get('env')==='development') ? 'sma.azar@gmail.com' : 'amir.monfared@gmail.com' ):userdata.id;
-                var link =  req.protocol + '://' + req.get('host') + '/reset/' + hash;
-                return db.mailResetPassword(userdata.uid, {email:email,user:userdata.id},link)
+                var email = data.id.toLowerCase() === 'admin' ? ((express().get('env')==='development') ? 'sma.azar@gmail.com' : 'amir.monfared@gmail.com' ):data.id;
+                var link =  req.protocol + '://' + req.get('host') + '/reset/';
+                return db.mailResetPassword(data.uid, {email:email,user:data.id},link)
             })
             .then(function(msg){
                 console.log('Message sent: ' + msg);
