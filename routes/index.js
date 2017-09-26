@@ -16,7 +16,7 @@ router.post('/login', function(req, res, next) {
                 //TODO: update admin email
                 var email = userdata.id.toLowerCase() === 'admin' ? ((express().get('env')==='development') ? 'sma.azar@gmail.com' : 'amir.monfared@gmail.com' ):userdata.id;
                 var link =  req.protocol + '://' + req.get('host') + '/reset/' + hash;
-                return db.mailResetPassword(userData.uid, {email:email,user:userData.id},link)
+                return db.mailResetPassword(userdata.uid, {email:email,user:userdata.id},link)
             })
             .then(function(msg){
                 console.log('Message sent: ' + msg);
