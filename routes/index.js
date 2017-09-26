@@ -3,7 +3,6 @@ var router = express.Router();
 var path = require('path')
 var passport = require('passport');
 var db = require('../queries');
-const mailer = require('nodemailer');
 
 router.post('/login', function(req, res, next) {
     if(req.body.forget){ //Send a 'reset password' link through email
@@ -17,7 +16,7 @@ router.post('/login', function(req, res, next) {
                 //TODO: update admin email
                 var email = userdata.id.toLowerCase() === 'admin' ? ((express().get('env')==='development') ? 'sma.azar@gmail.com' : 'amir.monfared@gmail.com' ):userdata.id;
                 var link =  req.protocol + '://' + req.get('host') + '/reset/' + hash;
-                return mailer(email,link)
+                return db.mailResetPassword(userData.uid, {email:email,user:userData.id},link)
             })
             .then(function(msg){
                 console.log('Message sent: ' + msg);
