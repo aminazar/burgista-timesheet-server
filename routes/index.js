@@ -3,6 +3,7 @@ var router = express.Router();
 var path = require('path')
 var passport = require('passport');
 var db = require('../queries');
+const mailer = require('nodemailer');
 
 router.post('/login', function(req, res, next) {
     if(req.body.forget){ //Send a 'reset password' link through email
