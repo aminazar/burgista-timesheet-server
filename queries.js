@@ -2,12 +2,13 @@
  * Created by Amin on 13/09/2016.
  */
 var promise = require('bluebird');
+const env = require('./env');
 var bCrypt = require('bcrypt-nodejs');
 var options = {promiseLib: promise};
 var pgp = require('pg-promise')(options);
 var app = require('express')();
 var config = require('./config.json')[app.get('env')];
-var connectionString = config.pgConnection;
+var connectionString = env.databaseUrl;
 var db = pgp(connectionString);
 var moment = require('moment');
 var nodemailer = require('nodemailer');

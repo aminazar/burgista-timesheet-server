@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/../BurgistaServer/.idea/BurgistaServer.iml" filepath="$PROJECT_DIR$/../BurgistaServer/.idea/BurgistaServer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/time-sheet.iml" filepath="$PROJECT_DIR$/.idea/time-sheet.iml" />
     </modules>
   </component>
 </project>

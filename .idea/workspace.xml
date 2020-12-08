@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="01756e81-ac51-4fee-b94e-d955943a2f48" name="Default" comment="Sending emails from burgista domain">
-      <change beforePath="$PROJECT_DIR$/.idea/runConfigurations/bin_www.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/runConfigurations/bin_www.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config.json" beforeDir="false" afterPath="$PROJECT_DIR$/config.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/queries.js" beforeDir="false" afterPath="$PROJECT_DIR$/queries.js" afterDir="false" />
     </list>
     <ignored path="BergistaServer.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -39,96 +40,73 @@
         </counts>
       </usages-collector>
     </session>
+    <session id="839795522">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.open.time.5" value="1" />
+          <entry key="project.opened" value="1" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.open">
+        <counts>
+          <entry key="env" value="1" />
+          <entry key="js" value="3" />
+          <entry key="json" value="1" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.open">
+        <counts>
+          <entry key="JSON" value="1" />
+          <entry key="JavaScript" value="3" />
+          <entry key="PLAIN_TEXT" value="1" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.edit">
+        <counts>
+          <entry key="env" value="10" />
+          <entry key="js" value="52" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.edit">
+        <counts>
+          <entry key="JavaScript" value="52" />
+          <entry key="PLAIN_TEXT" value="10" />
+        </counts>
+      </usages-collector>
+    </session>
   </component>
   <component name="FavoritesManager">
     <favorites_list name="BergistaServer" />
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/package.json">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="88">
-              <caret line="4" selection-start-line="4" selection-end-line="4" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/queries.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="805">
-              <caret line="62" column="60" selection-start-line="62" selection-start-column="60" selection-end-line="62" selection-end-column="60" />
+            <state relative-caret-position="136">
+              <caret line="10" column="20" selection-start-line="10" selection-start-column="4" selection-end-line="10" selection-end-column="20" />
               <folding>
                 <element signature="e#0#41#0" />
-                <marker date="1485760334000" expanded="true" signature="27703:27755" ph="..." />
-                <marker date="1485760334000" expanded="true" signature="28117:28167" ph="..." />
-                <marker date="1485760334000" expanded="true" signature="28168:28447" ph="..." />
-                <marker date="1485760334000" expanded="false" signature="28209:28225" ph="..." />
+                <element signature="n#style#0;n#tr#0;n#!!top" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/node_modules/bcrypt-nodejs/bCrypt.js">
+        <entry file="file://$PROJECT_DIR$/env.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="13640">
-              <caret line="620" selection-start-line="620" selection-end-line="620" />
+            <state relative-caret-position="180">
+              <caret line="48" column="31" lean-forward="true" selection-start-line="48" selection-start-column="31" selection-end-line="48" selection-end-column="31" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/routes/index.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="44">
-              <caret line="2" selection-start-line="2" selection-end-line="2" selection-end-column="26" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/node_modules/bluebird/js/release/async.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
-              <caret line="17" column="6" selection-start-line="17" selection-start-column="6" selection-end-line="17" selection-end-column="6" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/.gitignore">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="5" selection-start-column="5" selection-end-column="5" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/config.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="66">
-              <caret line="3" column="14" selection-end-line="17" selection-end-column="1" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/node_modules/passport-local/lib/strategy.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1804">
-              <caret line="82" column="3" selection-start-line="82" selection-start-column="3" selection-end-line="82" selection-end-column="3" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/routes/users.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="176">
-              <caret line="8" column="24" selection-start-line="8" selection-start-column="24" selection-end-line="8" selection-end-column="24" />
+            <state relative-caret-position="153">
+              <caret line="9" column="17" selection-start-line="9" selection-start-column="17" selection-end-line="9" selection-end-column="17" />
             </state>
           </provider>
         </entry>
@@ -160,6 +138,8 @@
       <find>pgp.helpers.u</find>
       <find>lower</find>
       <find>email</find>
+      <find>connectionString</find>
+      <find>pgConnection</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -180,6 +160,8 @@
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/pwdresetmailer.js" />
         <option value="$PROJECT_DIR$/routes/index.js" />
+        <option value="$PROJECT_DIR$/.env" />
+        <option value="$PROJECT_DIR$/env.js" />
         <option value="$PROJECT_DIR$/queries.js" />
         <option value="$PROJECT_DIR$/config.json" />
       </list>
@@ -212,10 +194,11 @@
       <path value="$PROJECT_DIR$/package.json" />
     </packageJsonPaths>
   </component>
-  <component name="ProjectFrameBounds" fullScreen="true">
-    <option name="y" value="23" />
-    <option name="width" value="2560" />
-    <option name="height" value="1337" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="-8" />
+    <option name="y" value="-8" />
+    <option name="width" value="784" />
+    <option name="height" value="1342" />
   </component>
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="1" id="Add" />
@@ -225,33 +208,18 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
             <path>
               <item name="BurgistaServer" type="b2602c69:ProjectViewProjectNode" />
-              <item name="BurgistaServer" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="BurgistaServer" type="b2602c69:ProjectViewProjectNode" />
-              <item name="BurgistaServer" type="462c0819:PsiDirectoryNode" />
-              <item name="assets" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="BurgistaServer" type="b2602c69:ProjectViewProjectNode" />
-              <item name="BurgistaServer" type="462c0819:PsiDirectoryNode" />
-              <item name="public" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="BurgistaServer" type="b2602c69:ProjectViewProjectNode" />
-              <item name="BurgistaServer" type="462c0819:PsiDirectoryNode" />
-              <item name="routes" type="462c0819:PsiDirectoryNode" />
+              <item name="time-sheet" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -261,11 +229,12 @@
     <property name="javascript.nodejs.core.library.configured.version" value="6.3.0" />
     <property name="js-jscs-nodeInterpreter" value="/usr/local/bin/node" />
     <property name="js.eslint.eslintPackage" value="" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../burgista-internal-delivery" />
     <property name="node.js.detected.package.prettier" value="true" />
     <property name="node.js.path.for.package.prettier" value="project" />
     <property name="node.js.selected.package.prettier" value="" />
-    <property name="nodejs_interpreter_path" value="/usr/local/bin/node" />
+    <property name="nodejs_interpreter_path" value="node" />
+    <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="Settings.JavaScript" />
   </component>
   <component name="RunDashboard">
@@ -333,6 +302,7 @@
       <workItem from="1527669746354" duration="68000" />
       <workItem from="1527669899734" duration="1202000" />
       <workItem from="1535816422248" duration="517000" />
+      <workItem from="1607435057681" duration="1509000" />
     </task>
     <task id="LOCAL-00001" summary="adding emailing report feature - 1st installment">
       <created>1483653596947</created>
@@ -408,7 +378,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="129797000" />
+    <option name="totallyTimeSpent" value="131306000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -420,16 +390,17 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="2560" height="1440" extended-state="0" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49335548" visible="true" weight="0.13745569" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49335548" visible="true" weight="0.18229167" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.24970461" />
       <window_info id="npm" order="2" sideWeight="0.50664455" side_tool="true" weight="0.1572327" />
       <window_info id="DB Browser" order="3" />
       <window_info id="Favorites" order="4" sideWeight="0.50664455" side_tool="true" weight="0.1572327" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" sideWeight="0.4986215" weight="0.328879" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4631745" weight="0.33333334" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4631745" visible="true" weight="0.31587562" />
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49547064" weight="0.39854014" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -437,7 +408,7 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="DB Execution Console" order="8" />
       <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.50452936" side_tool="true" weight="0.4" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="10" sideWeight="0.4541158" visible="true" weight="0.33853006" />
+      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.4541158" weight="0.5859247" />
       <window_info anchor="bottom" id="Version Control" order="11" weight="0.32931727" />
       <window_info anchor="right" x="100" y="100" width="2360" height="1240" id="Documentation" order="0" type="FLOATING" />
       <window_info anchor="right" id="Commander" order="1" weight="0.4" />
@@ -476,7 +447,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/queries.js</url>
-          <line>747</line>
+          <line>748</line>
           <option name="timeStamp" value="47" />
         </line-breakpoint>
       </breakpoints>
@@ -539,20 +510,8 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/passport/lib/middleware/authenticate.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="99">
-          <caret line="234" column="7" selection-start-line="234" selection-start-column="7" selection-end-line="234" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/pg-promise/node_modules/pg/lib/connection.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="298">
-          <caret line="538" column="10" selection-start-line="538" selection-start-column="10" selection-end-line="538" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/passport/lib/middleware/authenticate.js" />
+    <entry file="file://$PROJECT_DIR$/node_modules/pg-promise/node_modules/pg/lib/connection.js" />
     <entry file="file://$APPLICATION_CONFIG_DIR$/javascript/nodejs/6.3.0/core-modules/net.js" />
     <entry file="file://$APPLICATION_CONFIG_DIR$/javascript/nodejs/6.3.0/core-modules/events.js" />
     <entry file="file://$APPLICATION_CONFIG_DIR$/javascript/nodejs/6.3.0/core-modules/path.js" />
@@ -564,24 +523,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/bcrypt-nodejs/bCrypt.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="13640">
-          <caret line="620" selection-start-line="620" selection-end-line="620" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/bcrypt-nodejs/bCrypt.js" />
+    <entry file="file://$PROJECT_DIR$/node_modules/bluebird/js/release/async.js" />
+    <entry file="file://$PROJECT_DIR$/node_modules/passport-local/lib/strategy.js" />
     <entry file="file://$PROJECT_DIR$/routes/index.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="44">
+        <state relative-caret-position="34">
           <caret line="2" selection-start-line="2" selection-end-line="2" selection-end-column="26" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/bluebird/js/release/async.js">
+    <entry file="file://$PROJECT_DIR$/routes/users.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="17" column="6" selection-start-line="17" selection-start-column="6" selection-end-line="17" selection-end-column="6" />
+        <state relative-caret-position="136">
+          <caret line="8" column="24" selection-start-line="8" selection-start-column="24" selection-end-line="8" selection-end-column="24" />
         </state>
       </provider>
     </entry>
@@ -592,45 +547,49 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/config.json">
+    <entry file="file://$PROJECT_DIR$/package.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="66">
-          <caret line="3" column="14" selection-end-line="17" selection-end-column="1" />
+        <state relative-caret-position="135">
+          <caret line="9" column="25" lean-forward="true" selection-start-line="9" selection-start-column="25" selection-end-line="9" selection-end-column="25" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/node_modules/passport-local/lib/strategy.js">
+    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/lib/JavaScriptLanguage.jar!/com/intellij/javascript/nodejs/library/node-globals-stub.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1804">
-          <caret line="82" column="3" selection-start-line="82" selection-start-column="3" selection-end-line="82" selection-end-column="3" />
+        <state relative-caret-position="130">
+          <caret line="58" column="4" selection-start-line="58" selection-start-column="4" selection-end-line="58" selection-end-column="4" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/routes/users.js">
+    <entry file="file://$PROJECT_DIR$/.env">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="8" column="24" selection-start-line="8" selection-start-column="24" selection-end-line="8" selection-end-column="24" />
+        <state>
+          <caret column="139" selection-start-column="139" selection-end-column="139" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/queries.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="805">
-          <caret line="62" column="60" selection-start-line="62" selection-start-column="60" selection-end-line="62" selection-end-column="60" />
+        <state relative-caret-position="136">
+          <caret line="10" column="20" selection-start-line="10" selection-start-column="4" selection-end-line="10" selection-end-column="20" />
           <folding>
             <element signature="e#0#41#0" />
-            <marker date="1485760334000" expanded="true" signature="27703:27755" ph="..." />
-            <marker date="1485760334000" expanded="true" signature="28117:28167" ph="..." />
-            <marker date="1485760334000" expanded="true" signature="28168:28447" ph="..." />
-            <marker date="1485760334000" expanded="false" signature="28209:28225" ph="..." />
+            <element signature="n#style#0;n#tr#0;n#!!top" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/package.json">
+    <entry file="file://$PROJECT_DIR$/env.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="88">
-          <caret line="4" selection-start-line="4" selection-end-line="4" />
+        <state relative-caret-position="180">
+          <caret line="48" column="31" lean-forward="true" selection-start-line="48" selection-start-column="31" selection-end-line="48" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="153">
+          <caret line="9" column="17" selection-start-line="9" selection-start-column="17" selection-end-line="9" selection-end-column="17" />
         </state>
       </provider>
     </entry>
