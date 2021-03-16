@@ -9,9 +9,8 @@ var app = require('express')();
 var config = require('./config.json')[app.get('env')];
 var connectionString = process.env['DATABASE_URL']; // config.pgConnection;
 var db = pgp({
-      connectionString, ssl: {
-      rejectUnauthorized: false
-    }
+      connectionString, 
+      ssl: true,
   });
 var moment = require('moment');
 var nodemailer = require('nodemailer');
